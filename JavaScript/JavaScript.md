@@ -91,9 +91,9 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
 - ## `Promise`
 
-  具体看[这里]()
+  具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/Promise.md)
 
-- ## 事件循环机制
+- ## [TODO]事件循环机制
 
   具体看[这里]()
 
