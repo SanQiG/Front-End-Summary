@@ -1,10 +1,12 @@
 ## TODO
 
-#### 	哪些操作会导致内存泄漏
+#### 哪些操作会导致内存泄漏
 
+#### React生命周期
 
+#### 归并排序
 
-***
+------
 
 - ## `instanceof` 内部机制
 
@@ -20,21 +22,11 @@
 
 - ## 创建对象的方式
 
-  1. **工厂模式**
-  2. **构造函数模式**
-  3. **原型模式**
-  4. **组合模式**
-  5. **寄生构造函数模式**
-  6. **稳妥构造函数模式**
+  [戳我查看](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB.md)
 
 - ## 继承的方式
 
-  1. **原型链继承**
-  2. **借用构造函数**
-  3. **组合继承**
-  4. **原型式继承**
-  5. **寄生式继承**
-  6. **寄生组合式继承**
+  [戳我查看](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/%E7%BB%A7%E6%89%BF%E7%9A%84%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB.md)
 
 - ## 一道跟原型动态性有关的题
 
@@ -54,6 +46,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 ​	答案是：`true, true, true, true`
 
 ​	接着再来看：
+
 ```js
 function F() {}
 function O() {}
@@ -76,6 +69,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
 
 - ## 理解下面这张图
+
   ![](https://user-gold-cdn.xitu.io/2018/12/18/167c0772297e4ff8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 - ## JavaScript 中的 `==` 运算符
@@ -97,11 +91,11 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
 - ## `Promise`
 
-  具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/Promise.md)
+  具体看[这里]()
 
 - ## 事件循环机制
 
-  具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6.md)
+  具体看[这里]()
 
 - ## `this`的指向  
 
@@ -255,6 +249,23 @@ function unique(arr) {
   }
   ```
 
+- ## 实现原生 Ajax
+
+  ```javascript
+  let request;
+  if (window.XMLHttpRequest) request = new XMLHttpRequest();
+  else request = new ActiveXObject("Microsoft.XMLHTTP");
+  
+  request.onreadystatechange = function() {
+      if (request.readystate == 4 && request.status == 200) {
+          callback(request.responseText);
+      }
+  }
+  
+  request.open('GET', url);
+  request.send();
+  ```
+
 - ## 防抖与节流
 
   先来讲讲**防抖**：你尽管触发事件，但是我**一定在事件触发n秒后再执行**，如果你在一个事件触发的n秒内又触发了这个事件，那我就以新的事件的事件为标准，n秒后才执行，总之，就是要等你触发完事件n秒内不在触发事件。
@@ -277,6 +288,7 @@ function unique(arr) {
   再在介绍**节流**：如果你持续触发事件，每隔一段时间，只执行一次事件。有两种主流的实现方式，一种是**时间戳**，一种是设置**定时器**。
 
   ​	*时间戳*
+
   ```javascript
   function throttle(func, wait) {
       let context, args;
@@ -296,7 +308,7 @@ function unique(arr) {
 
   ​	*定时器*
 
-    ```javascript
+  ```javascript
   function throttle(func, wait) {
       let timeout;
       let previous = 0;
@@ -312,4 +324,4 @@ function unique(arr) {
           }
       }
   }
-    ```
+  ```
