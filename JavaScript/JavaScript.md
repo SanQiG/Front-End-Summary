@@ -8,6 +8,8 @@
 
 ------
 
+- ## [DOM](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/DOM.md)
+
 - ## `instanceof` 内部机制
 
   假设现在有 `x instanceof y`
