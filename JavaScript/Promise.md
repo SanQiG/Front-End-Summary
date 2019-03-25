@@ -62,7 +62,7 @@ function Promise(executor) {
     
     function reject(reason) {
         if (self.status == "pending") {
-            self.value  = value;
+            self.reason = reason;
             self.status = "rejected";
             
             self.onRejectedCallbacks.forEach(onRejected => onRejected());
