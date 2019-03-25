@@ -267,10 +267,10 @@ function unique(arr) {
 
   ```javascript
   function New(fn) {
-      let obj = {};
-      obj.prototype = fn.prototype;
+      let res = {};
+      res.prototype = fn.prototype;
       
-      let ret = fn.apply(obj, Array.prototype.slice.call(arguments, 1));
+      let ret = fn.apply(res, Array.prototype.slice.call(arguments, 1));
       
       if ((typeof ret == "function" || typeof ret == "object") && ret !== null) {
           return ret;
