@@ -87,7 +87,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   > **`ToPrimitive(obj)`**等价于：先计算**`obj.valueOf()`**，如果为原始值，则返回此结果；
   >
-  > 否则，计算**`obj.toString()`**，如果结果是原始值，则返回此结果；否则，抛出异常。
+  > 否则，计算`**obj.toString()**`，如果结果是原始值，则返回此结果；否则，抛出异常。
 
 - ## `var`和 `let` 区别
 
