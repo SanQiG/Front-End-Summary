@@ -89,6 +89,13 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   >
   > 否则，计算**`obj.toString()`**，如果结果是原始值，则返回此结果；否则，抛出异常。
 
+- ## `var`和 `let` 区别
+
+  1. ES6 可以用let定义块级作用域变量
+  2. let配合for循环的独特应用
+  3. let没有变量提升和暂时性死区
+  4. let变量不能重复声明
+
 - ## `Promise`
 
   具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/Promise.md)
@@ -114,6 +121,30 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 4. `for...of` 不能循环普通的对象，需要通过和 `Object.keys()` 搭配使用
 
 之所以说`for...of`修复了`for...in`的不足是因为`for...in`除了遍历除了数组元素之外，还会遍历自定义属性
+
+- ## 类数组转数组
+
+  ```js
+  let arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 };
+  // 1.slice
+  Array.prototype.slice.call(arrayLike);  // ["name", "age", "sex"]
+  // 2.splice
+  Array.protrotype.splice.call(arrayLike, 0);  // ["name", "age", "sex"]
+  // 3.ES6 Array.from
+  Array.from(arrayLike);  // ["name", "age", "sex"]
+  // 4.apply
+  Array.prototype.concat.apply([], arrayLike);  // ["name", "age", "sex"]
+  ```
+
+- ## 改写数组的`push`方法，保持原来的逻辑之外，再添加一个`console.log（arguments）`在控制台打印
+
+  ```js
+  const push = Array.prototype.push;
+  Array.prototype.push = ((val) => {
+      console.log(val);
+      push.call(this, val);
+  })
+  ```
 
 - ## 数组扁平化 + 去重
 
