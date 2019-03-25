@@ -30,6 +30,7 @@
 5. 调用 GPU 绘制，合成图层，显示在屏幕上
 
 `DOMContentLoaded`事件触发代表初始的HTML被完全加载和解析，不需要等待CSS，JS，图片加载。
+
 `Load`事件触发代表页面中的DOM，CSS，JS，图片已经全部加载完毕。
 
 如果相对浏览器渲染这块有更深入的了解，可以看[这篇文章](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/%E7%BD%91%E7%BB%9C%E3%80%81%E6%B5%8F%E8%A7%88%E5%99%A8/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%B8%B2%E6%9F%93%E8%BF%87%E7%A8%8B%E4%B8%8E%E5%8E%9F%E7%90%86.md)。
