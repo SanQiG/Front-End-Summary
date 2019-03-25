@@ -4,8 +4,6 @@
 
 #### React生命周期
 
-#### 归并排序
-
 ------
 
 - ## [DOM](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/DOM.md)
