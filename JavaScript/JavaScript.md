@@ -309,6 +309,34 @@ function unique(arr) {
       return res;
   }
   ```
+  
+- ## 实现浅拷贝和深拷贝
+
+  **浅拷贝的实现**
+
+  ```js
+  function shallowCopy(obj) {
+      if (typeof obj !== 'object') return;
+      let newObj = obj instanceof Array ? [] : {};
+      for (let key in obj) {
+          if (obj.hasOwnProperty(key)) newObj[key] = obj[key];
+      }
+      return newObj;
+  }
+  ```
+
+  **深拷贝的实现**
+
+  ```js
+  function deepCopy(obj) {
+      if (typeof obj !== 'object') return;
+      let newObj = obj instanceof Array ? [] : {};
+      for (let key in obj) {
+          if (obj.hasOwnProperty(key)) newObj[key] = typeof obj[key] === "object" ? deepCopy(obj[key]) : obj[key];
+      }
+      return newObj;
+  }
+  ```
 
 - ## 实现原生 Ajax
 
