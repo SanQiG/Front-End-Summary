@@ -152,6 +152,13 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   - 控制台日志（console.log）
   - 移除存在事件绑定的DOM元素（IE）
 
+- ## JS调用函数有哪几种方式
+  - 作为对象的方法调用
+  - 函数直接调用
+  - 作为构造函数调用
+  - 使用call/apply
+  - 使用bind
+
 - ## 数组扁平化 + 去重
 
   先来扁平化。
@@ -261,6 +268,23 @@ function unique(arr) {
       }
       delete context.fn;
       return result;
+  }
+  ```
+  
+- ## 实现`bind`
+
+  ```js
+  Function.prototype.bind = function(ctx) {
+      let self = this;
+      let args = Array.prototype.slice.call(arguments, 1);
+      
+      let fBound = function() {
+          let bindArgs = Array.prototype.slice.call(arguments);
+          return self.apply(this instanceof fBound ? this : ctx, args.concat(bindArgs));
+      }
+      
+      fBound.prototype = self.prototype;
+      return fBound;
   }
   ```
 
