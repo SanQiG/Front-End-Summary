@@ -1,7 +1,8 @@
-# Front-End-Summarize
+# Front End Summary
+
 前端总结
 
-戒骄戒躁，不断努力
+戒骄戒躁，不断努力，请你一定相信自己
 
 [JavaScript](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/JavaScript.md)
 
