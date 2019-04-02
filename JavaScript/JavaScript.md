@@ -1,6 +1,6 @@
 ## TODO
 
-#### React生命周期
+
 
 ------
 
@@ -412,3 +412,147 @@ function unique(arr) {
       }
   }
   ```
+
+- ## 简述同步和异步的区别
+
+  同步是阻塞模式，异步是非阻塞模式。
+
+  - 同步就是指一个进程在执行某个请求的时候，若该请求需要一段时间才能返回信息，那么这个进程将会一直等待下去，知道收到返回信息才继续执行下去
+  - 异步是指进程不需要一直等下去，而是继续执行下面的操作，不管其他进程的状态。当有消息返回时系统会通知进程进行处理，这样可以提高执行的效率。
+
+- ## 线程和进程的区别
+
+  **进程是资源分配的最小单位，而线程是程序代码执行的最小单位。**
+
+  一个程序至少有一个进程，一个进程至少有一个线程。线程的划分尺度小于进程，使得多线程程序的并发性高。另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能独立运行，必须依存在应用程序中，由应用程序提供多个线程执行控制。
+
+  从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。
+  
+- ## 一道面试题引发的思考
+
+  ```js
+  const obj = { selector: { to: { toutiao: "FE Coder"} }, target: [1, 2, { name: 'byted'}]};
+  
+  get(obj, 'selector.to.toutiao', 'target[0]', 'target[2].name');
+  // [ 'FE Coder', 1, 'byted']
+  ```
+
+  实现一个get函数，使得上面的输出成立。
+
+  首先，可以通过构建一个Function解决这个问题（[Function的详细介绍](<https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function>)）。
+
+  ```js
+  function get(data, ...args) {
+      return args.map(item => (new Function('data', `try {return data.${item}} catch(e) {}`))(data));
+  }
+  ```
+
+  还可以使用正则表达式来进行处理：
+
+  ```js
+  function get (data, ...args) {
+      return args.map(item => {
+          let res = data;
+          item.replace(/\[/g, '.')
+          	.replace(/\]/g, '')
+          	.split('.')
+          	.map(path => res = res && res[path]);
+          return res;
+      })
+  }
+  ```
+
+  也可以用eval，不过不推荐使用。
+
+  ```js
+  function get(data, ...args) {
+      return args.map(item => eval('data.' + item));
+  }
+  ```
+
+- ## 正则实现千位分隔符
+
+  ```js
+  let str = "1312567.903000";
+  let reg = /(?=(\B\d{3})+\.)/g;
+  
+  console.log(str.replace(reg, ","));
+  ```
+
+  或者
+
+  ```js
+  let str = "1312567.903000";
+  let reg = str.replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
+      return $1 + ',';
+  })
+  ```
+
+  还可以
+
+  ```js
+  let str = 1312567.903000;
+  str.toLocaleString();  // 不过这种方法会自动进行四舍五入
+  ```
+
+- ## 下面的代码输出什么？为什么？
+
+  ```js
+  Function,prototype.a = 'a';
+  Object.prototype.b = 'b';
+  function Person() {}
+  var p = new Person();
+  console.log('p.a: ' + p.a);  // undefined，因为new出来的p是一个对象
+  console.log('p.b: ' + p.b);  // b
+  ```
+
+- ## 下面的代码输出什么？为什么？
+
+  ```js
+  async function async1() {
+      console.log("a");
+      await async2();
+      console.log("b");
+  }
+  async function async2() {
+  	console.log("c");
+  }
+  console.log("d");
+  setTimeout(function () {
+      console.log("e");
+  }, 0);
+  async1();
+  new Promise(function (resolve) {
+      console.log("f");
+      resolve();
+  }).then(function () {
+      console.log("g");
+  });
+  console.log("h");
+  // d a c f h b g e
+  ```
+
+  **`async/await`本质上还是基于`Promise`的一些封装**，而`Promise`是属于微任务的一种。所以在使用`await`关键字与`Promise.then`效果类似：
+
+  ```js
+  setTimeout(_ => console.log(5))
+  
+  async function main() {
+  	console.log(1);
+      await side();
+      console.log(4);
+  }
+  
+  async function side() {
+      console.log(2);
+  }
+  
+  main();
+  
+  console.log(3);
+  // 1 2 3 4 5
+  ```
+
+  **async函数在await之前的代码都是同步执行的，可以理解为await之前的代码属于`new Promise`时传入的代码，await之后的所有代码都是在`promise.then`中的回调。await后的代码也会立即执行。
+  
+  
