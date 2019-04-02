@@ -13,8 +13,78 @@
   - 可以将事件应用于动态添加的子元素上
 
   但使用不当会造成事件在不应该触发时触发。
+- ## 如何获取元素位置与宽高
 
-  - ## 实现元素拖拽
+  - element.clientWidth  = content + padding
+  - element.clientHeight = content + padding
+  - **element.getBoundingClientRect()** 返回值情况
+    - left：包围盒左边border以外的边缘距页面左边的距离
+    - right：包围盒右边 border 以外的边缘距页面左边的距离
+    - top：包围盒上边 border 以外的边缘距页面顶部的距离
+    - bottom：包围盒下边 border 以外的便于距页面顶部的距离
+    - width：content + padding + border
+    - height：content + padding + border
+    - 注意，设置外边距时外边距合并的情况
+
+- ## scrollWidth、clientWidth 和 offsetWidth 的区别
+
+  [戳我查看](<https://www.cnblogs.com/kongxianghai/p/4192032.html>)
+
+- ## requestAnimationFrame 原理
+
+  > [MDN文档](<https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame>)
+  > [淘宝前端团队](<http://taobaofed.org/blog/2017/03/02/thinking-in-request-animation-frame/>)
+
+  `window.requestAnimationFrame()`告诉浏览器——你希望执行一个动画，并且要求**浏览器在下次重绘之前调用指定的回调函数更新动画**。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行。
+
+  > 注意：若你想在浏览器下次重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用`window.requestAnimationFrame()`
+
+  当你准备更新动画时你应该调用此方法。这将使浏览器在下一次重绘之前调用你传入给该方法的动画函数（即你的回调函数）。回调函数执行次数通常是每秒60次，但是在大多数遵循W3C建议的浏览器中，回调函数执行次数通常与浏览器屏幕刷新次数相匹配。为了提高性能和电池寿命，因此在大多数浏览器里，当`requestAnimationFrame()`运行在后台标签页或隐藏的`<iframe>`里时，`requestAnimationFrame()`会被暂停调用以提升性能和电池寿命。
+
+  
+
+  在`requestAnimationFrame()`之前，如果在JS中要实现动画效果，无外乎使用setTimeout 或 setInterval。存在的问题就是：
+
+  - 如何确定正确的时间间隔（浏览器、机器硬件的性能各不相同）？
+  - 毫秒不精确性怎么解决？
+  - 如何避免过度渲染（渲染频率太高、tab不可见等等）？
+
+  开发者可以用很多方式来减轻这些问题的症状，但是彻底解决，这个、基本、很难。
+
+  归根到底，问题的根源在于**时机**。对于前段开发者来说，setTimeout 和 setInterval 提供的是一个等长的定时器循环（timer loop），但是对于浏览器内核对渲染函数的响应以及何时能够发起下一个动画帧的时机，是完全不了解的。对于浏览器内核来讲，它能够了解发起下一个渲染帧的合适时机，但是对于任何 setTimeout 和 setInterval 传入的回调函数执行，都是一视同仁的，它很难知道哪个回调函数是用于动画渲染的，因此，优化的时机非常难以掌握。悖论就在于，写JavaScript的人了解一帧动画在哪行代码开始，哪行代码结束，却不了解应该何时开始，应该何时结束，而对内核引擎来说，事情却恰恰相反，所以二者很难完美配合，直到`requestAnimationFrame()`出现。
+
+  
+
+  举个栗子：
+
+  ```js
+  let box = document.getElementById('box');
+  shake(box, 500, 15);
+  
+  function shake(elm, dur=500, distance=10) {
+  	let origin_css = elm.style.cssText;
+  	elm.addEventListener("click", ani, false);
+  
+  	function ani() {
+  		let start = null;
+  		requestAnimationFrame(act);
+  		function act(timestamp) {
+  			if (!start) start = timestamp;
+  			let progress = timestamp - start;
+  			let time_id;
+  			if (progress <= dur) {
+  				elm.style.transform = 'translateX(' + distance * Math.sin((progress / dur) * 4 * Math.PI) + 'px)';
+  				time_id = requestAnimationFrame(act);
+  			} else {
+  				elm.style.cssText = origin_css;
+  				cancelAnimationFrame(time_id);
+  			}
+  		}
+  	}
+  }
+  ```
+
+- ## 实现元素拖拽
 
 ```html
 <div id="ball" style="width: 50px; height: 50px; position: absolute; top: 0; left: 0; border: 1px solid #000; border-radius: 50%;">
