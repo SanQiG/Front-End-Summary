@@ -32,7 +32,7 @@
 
 - ## requestAnimationFrame 原理
 
-  > [MDN文档](<https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame>)
+  > [MDN文档](<https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame>)、
   > [淘宝前端团队](<http://taobaofed.org/blog/2017/03/02/thinking-in-request-animation-frame/>)
 
   `window.requestAnimationFrame()`告诉浏览器——你希望执行一个动画，并且要求**浏览器在下次重绘之前调用指定的回调函数更新动画**。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行。
