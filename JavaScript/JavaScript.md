@@ -575,6 +575,6 @@ function unique(arr) {
   // 1 2 3 4 5
   ```
 
-  **async函数在await之前的代码都是同步执行的，可以理解为await之前的代码属于`new Promise`时传入的代码，await之后的所有代码都是在`promise.then`中的回调。await后的代码也会立即执行。
+  **async函数在await之前的代码都是同步执行的，可以理解为await之前的代码属于`new Promise`时传入的代码，await之后的所有代码都是在`promise.then`中的回调。await后的代码也会立即执行**。
   
   
