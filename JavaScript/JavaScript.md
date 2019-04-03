@@ -494,6 +494,28 @@ function unique(arr) {
   let str = 1312567.903000;
   str.toLocaleString();  // 不过这种方法会自动进行四舍五入
   ```
+  
+- ## 正则实现转换下划线命名法和驼峰命名法
+
+  - 下划线命名法 -> 驼峰命名法
+
+    ```js
+    function toHump(str) {
+        return str.replace(/\_([a-z])/g, function($0, $1) {
+            return $1.toUpperCase();
+        })
+    }
+    ```
+
+  - 驼峰命名法 -> 下划线命名法
+
+    ```js
+    function toLine(str) {
+        return str.replace(/[A-Z]/g, function($0) {
+            return '_' + $0.toLowerCase();
+        })
+    }
+    ```
 
 - ## 下面的代码输出什么？为什么？
 
