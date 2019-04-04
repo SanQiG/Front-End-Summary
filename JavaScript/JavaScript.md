@@ -617,3 +617,55 @@ function unique(arr) {
   ```
 
   转换为十进制结果就是0.30000000000000004。
+
+- ## 用`setTimeout`实现`setInterval`
+
+  ```js
+  function mySetInterval(fn, wait, count) {
+  	function interval() {
+  		if (typeof count == "undefined" || count --> 0) {  // 这里的 --> 其实是先判断count是否大于0，然后再自减一（第一次看到这种写法。。。）
+  			setTimeout(interval, wait);
+  			try {
+  				fn();
+  			} catch (e) {
+  				count = 0;
+          throw e.toString();
+  			}
+  		}
+  	}
+  	setTimeout(interval, wait);
+  }
+  ```
+
+- ## Fetch和Ajax的区别
+
+  - **Ajax**：利用的是XMLHttpRequest对象来请求数据的。
+
+  - **Fetch**：window对象的一个方法，主要特点是：
+
+  1. 第一个参数是URL
+  2. 第二个参数可选，可以控制不同的init对象
+  3. 使用了es6的promise对象
+
+  ```js
+  fetch(url).then(function(response) {
+      return response.json();  // 执行成功第一步
+  }).then(function(val) {
+      // 执行成功第二步
+  }).catch(function(err) {
+      // 中途任何地方出错都会在这里捕捉到
+  })
+  ```
+
+  注意：fetch的第二个参数中
+
+  1. 默认的请求为get请求，可以使用`method: post`来进行配置
+  2. 第一步中的response有许多方法：`json()`、`text()`、`formData()`
+  3. fetch跨域的时候默认不会带cookie，需要手动指定：`credentials: 'include'`
+
+  - **fetch和ajax的主要区别**
+
+  1. 当接收到一个代表错误的HTTP状态码时，从fetch()返回的**Promise不会被标记为reject**，即便该HTTP响应的状态码是404或500。相反，它会将Promise状态标记为resolve（**但是会将resolve的返回值的`ok`属性设置为false**），仅当网络故障时或请求被阻止时，才会标记为reject。
+  2. 在默认情况下**fetch不会从服务器端发送或接收任何cookies**。
+  
+  
