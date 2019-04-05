@@ -31,15 +31,15 @@
   有了上面`instanceof`运算符的JS代码和原型继承图，再来理解`instanceof`运算符易如反掌。先来看几个`instanceof`复杂用法：
 
   ```js
-  console.log(Object   instanceof Object);// 
-  console.log(Function instanceof Function);
-  console.log(Number   instanceof Number);
-  console.log(String   instanceof String);
-  
-  console.log(Function instanceof Object);
-  
-  console.log(Foo      instanceof Function);
-  console.log(Foo      instanceof Foo);
+  console.log(Object   instanceof Object);  // true
+  console.log(Function instanceof Function);// true
+  console.log(Number   instanceof Number);  // false
+  console.log(String   instanceof String);  // false
+
+  console.log(Function instanceof Object);  // true
+
+  console.log(Foo      instanceof Function);// true
+  console.log(Foo      instanceof Foo);     // false
   ```
 
   - `Object instanceof Object`
