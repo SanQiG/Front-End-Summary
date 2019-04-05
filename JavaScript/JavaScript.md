@@ -6,15 +6,92 @@
 
 - ## `instanceof` 内部机制
 
-  假设现在有 `x instanceof y`
+  假设现在有 `L instanceof R`
 
   ```javascript
-  while (x.__proto__ !== null) {
-      if (x.__proto__ == y.prototype) return true;
-      x.__proto__ = x.__proto__.__proto__;
+  function instance_of(L, R) {  // L表示左表达式，R表示右表达式
+      var O = R.prototype,  // 取R的显式原型
+          L = L.__proto__;  // 取L的隐式原型
+      while (true) {
+      	if (L === null)
+              return false;
+          if (O === L)  // 这里重点：当O严格等于L时，返回true
+              return true;
+          L = L.__proto__;
+      }
   }
-  if (x.__proto__ == null) return false;
   ```
+
+- ## 理解下面这张图
+
+  ![](https://user-gold-cdn.xitu.io/2018/12/18/167c0772297e4ff8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+- ## 你真的了解`instanceOf`操作符吗？
+
+  有了上面`instanceof`运算符的JS代码和原型继承图，再来理解`instanceof`运算符易如反掌。先来看几个`instanceof`复杂用法：
+
+  ```js
+  console.log(Object   instanceof Object);// 
+  console.log(Function instanceof Function);
+  console.log(Number   instanceof Number);
+  console.log(String   instanceof String);
+  
+  console.log(Function instanceof Object);
+  
+  console.log(Foo      instanceof Function);
+  console.log(Foo      instanceof Foo);
+  ```
+
+  - `Object instanceof Object`
+
+    ```js
+    // 为了表述清楚，首先区分左侧表达式和右侧表达式
+    ObjectL = Object, ObjectR = Object;
+    // 下面根据规范逐步推演
+    O = Object.prototype = Object.prototype;
+    L = Object.__proto__ = Function.prototype;  // 注意这一步
+    // 第一次判断
+    O != L;
+    // 循环查找L是否还有__proto__
+    L = Function.prototype.__proto__ = Object.prototype;
+    // 第二次判断
+    O == L;
+    // 返回true
+    ```
+
+  - `Function instanceof Function`
+
+    ```js
+    // 为了表述清楚，首先区分左侧表达式和右侧表达式
+    FunctionL = Function， FunctionR = Function;
+    // 下面根据规范逐步推演
+    O = FunctionR.prototype = Function.prototype;
+    L = FunctionL.__proto__ = Function.prototype;
+    // 第一次判断
+    O == L;
+    // 返回true
+    ```
+
+  - `Foo instanceof Foo`
+
+    ```js
+    // 为了表述清楚，首先区分左侧表达式和右侧表达式
+    FooL = Foo, FooR = Foo;
+    // 下面根据规范逐步推演
+    O = FooR.prototype = Foo.prototype;
+    L = FooL.__proto__ = Function.prototype;
+    // 第一次判断
+    O != L;
+    // 循环查找L是否还有__proto__
+    L = Function.prototype.__proto__ = Object.prototype;
+    // 第二次判断
+    O != L;
+    // 再次循环查找L是否还有__proto__
+    L = Object.prototype.__proto__ = null;
+    // 第三次判断
+    L == null
+    // 返回false
+    ```
 
 - ## 创建对象的方式
 
@@ -61,12 +138,6 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 ​	这里的坑点在于**重写了原型对象!!!**
 
 ​	**重写原型对象切断了现有原型与`任何之前已经存在的对象实例`之间的联系，他们引用的仍然是最初的原型。**
-
-
-
-- ## 理解下面这张图
-
-  ![](https://user-gold-cdn.xitu.io/2018/12/18/167c0772297e4ff8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 - ## JavaScript 中的 `==` 运算符
 
