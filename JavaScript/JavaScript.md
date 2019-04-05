@@ -739,4 +739,8 @@ function unique(arr) {
   1. 当接收到一个代表错误的HTTP状态码时，从fetch()返回的**Promise不会被标记为reject**，即便该HTTP响应的状态码是404或500。相反，它会将Promise状态标记为resolve（**但是会将resolve的返回值的`ok`属性设置为false**），仅当网络故障时或请求被阻止时，才会标记为reject。
   2. 在默认情况下**fetch不会从服务器端发送或接收任何cookies**。
   
+  - ## 前端模块化
+
+  [戳我查看](<https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/%E6%A8%A1%E5%9D%97%E5%8C%96.md>)
+  
   
