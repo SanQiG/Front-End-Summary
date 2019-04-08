@@ -57,7 +57,7 @@
 
 
 
-## 9、层叠顺序和堆栈上下文
+## 9、[TODO]层叠顺序和堆栈上下文
 
 ![](https://images2015.cnblogs.com/blog/608782/201609/608782-20160923104742809-2054066790.png)
 
@@ -84,7 +84,7 @@
 
 - `overflow: auto` 或 `overflow: hidden` **触发 BFC**
 
-## 11、CSS 画三角形、梯形和平行四边形
+## 11、[TODO]CSS 画三角形、梯形和平行四边形
 
 ## 12、多行文本溢出显示省略号
 
@@ -112,3 +112,61 @@ text-overflow: ellipsis;
 - `absolute`：不为元素预留空间，通过指定元素相对于最近的非static定位祖先元素的偏移，来确定元素位置。绝对定位的元素可以设置外边距，且不会与其他边距合并。
 - `fixed`：不为元素预留空间，通过指定元素相对于屏幕视口的位置来指定元素位置。元素的位置在屏幕滚动时不会改变。fixed 属性会创建新的层叠上下文。当元素祖先的 transform 属性非 none 时，容器由视口改为该祖先。
 
+## 16、CSS3实现硬币旋转
+
+```html
+<div id="euro">
+    <div class="back"></div>
+    <div class="middle" style="transform: translateZ(1px)"></div>
+    <div class="middle" style="transform: translateZ(2px)"></div>
+    <div class="middle" style="transform: translateZ(3px)"></div>
+    <div class="middle" style="transform: translateZ(4px)"></div>
+    <div class="middle" style="transform: translateZ(5px)"></div>
+    <div class="middle" style="transform: translateZ(6px)"></div>
+    <div class="middle" style="transform: translateZ(7px)"></div>
+    <div class="middle" style="transform: translateZ(8px)"></div>
+    <div class="middle" style="transform: translateZ(9px)"></div>
+    <div class="front" style="transform: translateZ(10px)"></div>
+</div>
+```
+
+```css
+#euro {
+    width: 150px;
+    height: 150px;
+    margin-left: -75px;
+    margin-top: -75px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+    animation: spin 2.5s linear infinite;
+}
+.back {
+    background-image: url("images/backeuro.png");
+    width: 150px;
+    height: 150px;
+}
+.middle {
+    background-image: url("images/backeuro.png");
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 0;
+}
+.front {
+    background-image: url("images/faceeuro.png");
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 0;
+}
+@keyframes spin {
+    from {
+    	transform: rotateY(0deg);
+    }
+    to {
+		transform: rotateY(360deg);
+    }
+}
+```
