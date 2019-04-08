@@ -21,3 +21,5 @@
 [计算机基础知识](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.md)
 
 [MVVM](https://github.com/SanQiG/Front-End-Summary/blob/master/MVVM/MVVM.md)
+
+[设计模式](https://github.com/SanQiG/Front-End-Summary/blob/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%B1%87%E6%80%BB.md)
