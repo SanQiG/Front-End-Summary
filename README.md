@@ -20,4 +20,4 @@
 
 [计算机基础知识](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.md)
 
-[React](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/React/React.md)
+[MVVM](https://github.com/SanQiG/Front-End-Summary/blob/master/MVVM/MVVM.md)
