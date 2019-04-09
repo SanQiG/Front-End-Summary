@@ -430,16 +430,16 @@ function unique(arr) {
 
   ```javascript
   function debounce(func, wait) {
-      let timeout;
-      return function() {
-  		let context = this;
-          let args = arguments;
-          
-          clearTimeout(timout);
-          timeout = setTimeout(function() {
-              func.apply(context, args);
-          }, wait);
-      }
+    let timeout;
+    return function() {
+      let ctx  = this;
+      let args = arguments;
+
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        func.apply(ctx, args);
+      }, wait);
+    }
   }
   ```
 
@@ -449,18 +449,18 @@ function unique(arr) {
 
   ```javascript
   function throttle(func, wait) {
-      let context, args;
-      let previous = 0;
-      
-      return function() {
-          let now = +new Date();
-          context = this;
-          args = arguments;
-          if (now - previous > wait) {
-              func.apply(context, args);
-              previous = now;
-          }
+    let ctx, args;
+    let prev = 0;
+
+    return function() {
+      let now = Date.now();
+      ctx  = this;
+      args = arguments;
+      if (now - prev > wait) {
+        func.apply(ctx, args);
+        prev = now;
       }
+    }
   }
   ```
 
@@ -468,19 +468,19 @@ function unique(arr) {
 
   ```javascript
   function throttle(func, wait) {
-      let timeout;
-      let previous = 0;
-      
-      return function() {
-  		context = this;
-          args = arguments;
-          if (!timeout) {
-              timeout = setTimeout(function() {
-                  timeout = null;
-                  func.apply(context, args);
-              }, wait)
-          }
+    let ctx, args;
+    let timeout;
+
+    return function() {
+      ctx  = this;
+      args = arguments;
+      if (!timeout) {
+        timeout = setTimeout(function() {
+          timeout = null;
+          func.apply(ctx, args);
+        }, wait)
       }
+    }
   }
   ```
 
