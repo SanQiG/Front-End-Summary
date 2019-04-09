@@ -226,74 +226,74 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   先来扁平化。
 
-```javascript
-function flattern(arr) {
-    return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flattern(cur) : cur), []);
-}
-```
+  ```javascript
+  function flattern(arr) {
+      return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flattern(cur) : cur), []);
+  }
+  ```
 
-```javascript
-function flattern(arr) {
-    while (arr.some(item => Array.isArray(item))) {
-        arr = [].concat(...arr);
-    }
-    return arr;
-}
-```
+  ```javascript
+  function flattern(arr) {
+      while (arr.some(item => Array.isArray(item))) {
+          arr = [].concat(...arr);
+      }
+      return arr;
+  }
+  ```
 
-```javascript
-function flattern(arr) {
-    return arr.toString().split(',').map((item) => +item);
-}
-```
+  ```javascript
+  function flattern(arr) {
+      return arr.toString().split(',').map((item) => +item);
+  }
+  ```
 
-```javascript
-function iterTree(tree) {
-    if (Array.isArray(tree)) {
-        for (let i = 0; i < tree.length; ++i) {
-            yield* iterTree(tree[i]);
-        }
-    } else {
-        yield tree;
-    }
-}
-```
+  ```javascript
+  function iterTree(tree) {
+      if (Array.isArray(tree)) {
+          for (let i = 0; i < tree.length; ++i) {
+              yield* iterTree(tree[i]);
+          }
+      } else {
+          yield tree;
+      }
+  }
+  ```
 
 ​	再来去重。
 
-```javascript
-function unique(arr) {
-    return arr.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
-}
-```
+  ```javascript
+  function unique(arr) {
+      return arr.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
+  }
+  ```
 
-```javascript
-function unique(arr) {
-    return array.filter((item, index, array) => array.indexOf(item) === index);
-}
-```
+  ```javascript
+  function unique(arr) {
+      return array.filter((item, index, array) => array.indexOf(item) === index);
+  }
+  ```
 
-```javascript
-function unique(arr) {
-    let obj = {};
-    return arr.filter((item, index, arr) => {
-        return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true);
-    })
-}
-```
+  ```javascript
+  function unique(arr) {
+      let obj = {};
+      return arr.filter((item, index, arr) => {
+          return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true);
+      })
+  }
+  ```
 
 ​	ES6 的去重方法：
 
-```js
-let unique = (arr) => [...new Set(arr)];
-```
+  ```js
+  let unique = (arr) => [...new Set(arr)];
+  ```
 
-```js
-function unique(arr) {
-    let seen = new Map();
-    return arr.filter((a) => !seen.has(a) && seen.set(a, 1));
-}
-```
+  ```js
+  function unique(arr) {
+      let seen = new Map();
+      return arr.filter((a) => !seen.has(a) && seen.set(a, 1));
+  }
+  ```
 
 - ## 实现`call`、`apply`
 
@@ -403,19 +403,46 @@ function unique(arr) {
 
 - ## 实现原生 Ajax
 
+  **发送GET请求**
+
   ```javascript
   let request;
   if (window.XMLHttpRequest) request = new XMLHttpRequest();
   else request = new ActiveXObject("Microsoft.XMLHTTP");
   
   request.onreadystatechange = function() {
-      if (request.readystate == 4 && request.status == 200) {
-          callback(request.responseText);
-      }
+    if (request.readyState == 4 && request.status == 200) {
+      callback(request.responseText);
+    }
   }
   
-  request.open('GET', url);
+  request.open("GET", url);
   request.send();
+  ```
+  
+  **发送POST请求**
+  
+  ```javascript
+  let request;
+  // 1.创建一个XMLHttpRequest对象
+  if (window.XMLHttpRequest) request = new XMLHttpRequest();
+  else request = new ActiveXObject("Microsoft.XMLHTTP");
+  
+  // 2.设置回调监听
+  request.onreadystatechange = function() {
+    if (request.readyState == 4 && request.status == 200) {
+      callback(request.responseText);
+    }
+  }
+  
+  // 3.打开一个链接
+  request.open("POST", url);
+  
+  // 4.设置请求头（GET没有该步骤）
+  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  
+  // 5.发送请求（参数: 具体发送的值）
+  request.send("name=value&age=12");
   ```
 
 - ## 防抖与节流
