@@ -1,9 +1,3 @@
-## TODO
-
-
-
-------
-
 - ## `instanceof` 内部机制
 
   假设现在有 `L instanceof R`
