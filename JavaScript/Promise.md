@@ -48,6 +48,7 @@ function Promise(executor) {
     self.reason = undefined;
     self.status = "pending";
     
+    // 处理setTimeout使状态不能立即改变的情况
     self.onFullFilledCallbacks = [];
     self.onRejectedCallbacks = [];
     
