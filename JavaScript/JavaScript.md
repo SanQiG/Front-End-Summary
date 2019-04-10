@@ -764,4 +764,119 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   [戳我查看](<https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/%E6%A8%A1%E5%9D%97%E5%8C%96.md>)
   
+- ## JS基本类型的属性赋值问题
+
+  在某些情况下基本类型会表现的“很像”对象类型，使得用户可以像使用对象一样去使用基本类型数据。某些情况主要指“对属性的赋值和读取”。
+
+  当你尝试将名为"bar"的属性分配给变量foo时，像这样：
+
+  ```javascript
+  foo.bar = 'abc';
+  ```
+
+  那么结果取决于foo的值的类型：
+
+  1. 如果foo的值的类型为undefined或null，那么将抛出一个错误
+  2. 如果foo的值的类型是Object类型，那么将在对象foo上定义一个命名的属性”bar"，并且其值将被设置为"abc"
+  3. 如果foo的值是Number、String或Boolean类型，那么变量foo不会以任何方式改变。在这种情况下，上面的赋值操作将是一个[NOP](<https://zh.wikipedia.org/wiki/NOP>)
+
+  以Number类型为例：
+
+  ```javascript
+  var a = 12.3;
+  console.log(a.toFixed(3)); // 输出"12.300"
+  
+  a.foo = 'bar';  // 不报错
+  console.log(a.foo);  // 输出undefined
+  ```
+
+  上述代码说明，基本类型可以像对象类型一样使用，包括访问其属性、对其属性赋值（尽管实际上不起作用，但是形式上可以）。
+
+  之所以能这样去使用基本类型，是因为JavaScript引擎内部在处理对某个基本类型`a`进行形如`a.sth`的操作时，会在内部临时创建一个对应的包装类型（对数字类型来说就是`Number`类型）的临时对象，并把对基本类型的操作代理到这个临时对象身上， 使得对基本类型的属性访问看起来像对象一样。但是在操作完成后，临时对象就被丢弃了，下次再访问时，会重新建立临时对象，当然对之前的临时对象的修改都不会有效了。
+
+- ## 判断对象是否为空对象
+
+  - 方法1：`for...in...`遍历属性，为真则为空对象，否则为非空对象。
+
+    ```javascript
+    for (var key in obj) {
+      return false;
+    }
+    return true;
+    ```
+
+  - 方法2：通过`JSON.stringify()`来判断。
+
+    ```javascript
+    if (JSON.stringify(obj) == "{}") {
+        return true;
+    }
+    return false;
+    ```
+
+  - 方法3：ES6新增的方法`Object.keys()`，`Object.keys()`会**返回一个由一个给定对象的自身可枚举属性组成的数组**。
+
+    ```javascript
+    Object.keys(obj).length === 0;
+    ```
+
+- ## 如何判断两个对象相等
+
+  ```javascript
+  function equals(x, y) {
+    let f1 = x instanceof Object;
+    let f2 = y instanceof Object;
+    if (!f1 || !f2) return x === y;
+    if (Object.keys(f1).length !== Object.keys(f2).length) return false;
+    let newX = Object.keys(x);
+    for (let value of newX) {
+      let a = x[value] instanceof Object;
+      let b = y[value] instanceof Object;
+      if (a && b) {
+        equals(x[value], y[value]);
+      } else if (x[value] !== y[value]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  ```
+
+- ## 什么是函数柯里化？实现sum(1)(2)(3)返回结果是1，2，3之和
+
+  函数柯里化是把接收多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。
+
+  ```javascript
+  function sum(a) {
+    return function(b) {
+      return function(c) {
+        return a+b+c;
+      }
+    }
+  }
+  console.log(sum(1)(2)(3));  // 6
+  ```
+
+  ### 引申：实现一个curry函数，将普通函数柯里化
+
+  ```javascript
+  function curry(fn, args = []) {
+    return function() {
+      let rest = [...args, ...arguments];
+      if (rest.length < fn.length) {
+        return curry.call(this, fn, rest);
+      } else {
+        return fn.apply(this, rest);
+      }
+    }
+  }
+  
+  function sum(a, b, c) {
+    return a + b + c;
+  }
+  
+  let sumFn = curry(sum);
+  console.log(sumFn(1)(2)(3));  // 6
+  console.log(sumFn(1)(2, 3));  // 6
+  ```
   
