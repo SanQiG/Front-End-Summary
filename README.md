@@ -4,6 +4,7 @@
 
 戒骄戒躁，不断努力，请你一定相信自己
 
+[此情无计可消除，才下眉头，却上心头。]()
 [JavaScript](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/JavaScript.md)
 
 [DOM](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/DOM.md)
