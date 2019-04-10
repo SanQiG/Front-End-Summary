@@ -63,10 +63,10 @@
 
 **准确的 7 层为：**
 
-  		1. 形成堆叠上下文环境的元素的背景与边框
-  		2. 拥有负 `z-index` 的子堆叠上下文元素（负的越高堆叠层级越低）
-  		3. 正常流式布局，非 `inline-block`，无 `position` 定位（static除外）的子元素
-  		4. 无 `position` 定位的
+	1. 形成堆叠上下文环境的元素的背景与边框
+	2. 拥有负 `z-index` 的子堆叠上下文元素（负的越高堆叠层级越低）
+	3. 正常流式布局，非 `inline-block`，无 `position` 定位（static除外）的子元素
+	4. 无 `position` 定位的
 
 ## 10、有哪些清除浮动的技术？
 
@@ -84,7 +84,31 @@
 
 - `overflow: auto` 或 `overflow: hidden` **触发 BFC**
 
-## 11、[TODO]CSS 画三角形、梯形和平行四边形
+## 11、CSS 画三角形、梯形和平行四边形
+
+```css
+/*三角形*/
+#box {
+	width: 0;
+    height: 0;
+    border: 50px solid transparent;
+    border-bottom: 50px solid steelblue;
+}
+/*梯形*/
+#box {
+	width: 50px;
+    height: 0;
+    border: 50px solid transparent;
+    border-bottom: 50px solid steelblue;
+}
+/*平行四边形，如需让内容保持不倾斜，只需再嵌套一层div然后倾斜45度就好*/
+#box {
+	width: 200px;
+    height: 100px;
+    transform: skew(-45deg);
+    background: steelblue;
+}
+```
 
 ## 12、多行文本溢出显示省略号
 
