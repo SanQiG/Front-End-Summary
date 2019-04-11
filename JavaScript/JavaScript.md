@@ -227,12 +227,14 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   先来扁平化。
 
   ```javascript
+  // 深度策略
   function flattern(arr) {
       return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flattern(cur) : cur), []);
   }
   ```
 
   ```javascript
+  // 广度策略
   function flattern(arr) {
       while (arr.some(item => Array.isArray(item))) {
           arr = [].concat(...arr);
