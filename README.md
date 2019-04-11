@@ -8,7 +8,9 @@
 
 *此情无计可消除，才下眉头，却上心头。*
 
-[JavaScript](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/JavaScript.md)
+[JavaScript(卷一)](https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/JavaScript.md)
+
+[JavaScript(卷二)](https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/JavaScript2.md)
 
 [DOM](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/DOM.md)
 
