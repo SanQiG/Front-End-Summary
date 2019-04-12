@@ -194,3 +194,14 @@ text-overflow: ellipsis;
     }
 }
 ```
+## background-origin作用
+
+背景定位原点background-origin是CSS3新添加的有关背景的属性，主要是**改变背景起始的原点位置**。
+
+属性值有三个：
+
+**`border-box`**：背景图片的摆放以border区域为参考
+
+**`padding-box`**：背景图片的摆放以padding区域为参考
+
+**`content-box`**：背景图片的摆放以content区域为参考
