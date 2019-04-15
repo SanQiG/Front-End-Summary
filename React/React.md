@@ -32,31 +32,29 @@ render() {
 
 ### 初始渲染（装载）
 
-  **getDefaultProps**：获取实例的默认属性
-
-  **getInitialState**：获取每个实例的初始化状态
-
-  **componentWillMount**：组件即将被装载、渲染到页面上
-
-  **render**：组件在这里生成虚拟的DOM节点
-
-  **componentDidMount**：组件真正在被装载之后
+  生命周期函数             |  作用
+  ---------------------- | --------------------
+  **getDefaultProps**    | 获取实例的默认属性
+  **getInitialState**    | 获取每个实例的初始化状态
+  **componentWillMount** | 组件即将被装载、渲染到页面上
+  **render**             | 组件在这里生成虚拟的DOM节点
+  **componentDidMount**  | 组件真正在被装载之后
 
 ### 更新
 
-  **componentWillReceiveProps**：组件将要接受到属性的时候调用
-
-  **shouldComponentUpdate**：组件接受到新属性或者新状态的时候（可以返回false，接收数据后不更新，阻止render调用，后面的函数不会被继续执行了）
-
-  **componentWillUpdate**：组件即将更新不能修改属性和状态
-
-  **render**：组件重新描绘
-
-  **componentDidUpdate**：组件已经更新
+  生命周期函数                    |  作用
+  ----------------------------- | -------------------------------
+  **componentWillReceiveProps** | 组件将要接受到属性的时候调用
+  **shouldComponentUpdate**     | 组件接受到新属性或者新状态的时候（可以返回false，接收数据后不更新，阻止render调用，后面的函数不会被继续执行了）
+  **componentWillUpdate**       | 组件即将更新不能修改属性和状态
+  **render**                    | 组件重新描绘
+  **componentDidUpdate**        | 组件已经更新
 
 ### 卸载
 
-  **componentWillUnmount**：组件即将卸载
+  生命周期函数               |  作用
+  ------------------------ | ---------------------------
+  **componentWillUnmount** | 组件即将卸载
 
 ## shouldComponentUpdate是做什么的（React性能优化是哪个周期函数）？
 
