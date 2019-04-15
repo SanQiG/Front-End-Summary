@@ -1,3 +1,39 @@
+## MVC
+
+![MVC](http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020105.png)
+
+M（Model）：数据保存
+
+V（View）：用户页面
+
+C（Controller）：业务逻辑
+
+所有通信都是单向的。
+
+1. View传指令到Controller。
+
+2. Controller完成业务逻辑后，要求Model改变状态。
+
+3. Model将新的数据发送到View，用户得到反馈。
+
+## MVP
+
+![MVP](http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020109.png)
+
+M（Model）是业务逻辑层，主要负责数据，网络请求等操作
+
+V（View）是视图层，负责绘制UI元素、与用户进行交互
+
+P（Presenter）是View与Model交互的中间纽带，处理与用户交互的逻辑
+
+MVP模式将Controller改名为Presenter，同时改变了通信方向。
+
+1. 各部分之间的通信，都是双向的。
+
+2. View与Model不发生联系，都通过Presenter传递。
+
+3. View非常薄，不部署任何业务逻辑，称为“被动视图”，即没有任何主动性，而Presenter非常厚，所有业务逻辑都部署在那里。
+
 ## MVVM
 
 ![MVVM](http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020110.png)
@@ -10,9 +46,7 @@ ViewModel通过**双向数据绑定**把View层和Model层连接了起来，而V
 
 ## MVVM和MVC的区别？
 
-![MVC](http://www.ruanyifeng.com/blogimg/asset/2015/bg2015020105.png)
-
-MVC也是一种设计思想，主要就是MVC中的Controlled演变成MVVM中的ViewModel。MVVM主要解决了MVC中大量的DOM操作使页面渲染性能降低，加载速度变慢，影响用户体验。和当Model频繁发送变化，开发者需要主动更新到View。
+MVC也是一种设计思想，主要就是MVC中的Controlled演变成MVVM中的ViewModel。MVVM主要解决了MVC中大量的DOM操作使页面渲染性能降低，加载速度变慢，影响用户体验。和当Model频繁发送变化，开发者需要主动更新到View。 
 
 ## 数据的双向绑定
 
