@@ -62,10 +62,57 @@ render() {
 
 shouldComponentUpdate这个方法用来判断是否需要调用render方法重新描绘dom。因为dom的描绘非常消耗性能，如果我们能在shouldComponentUpdate方法中能够写出更优化的dom diff算法，可以极大的提高性能。
 
-## 为什么虚拟DOM会提高性能？
+## 为什么虚拟DOM会提高性能？（必考）
 
 虚拟dom相当于在JS和真实的dom中间加了一个缓存，利用dom diff算法避免了没有必要的dom操作，从而提高性能。
 
-用JS对象结构表示DOM树的结构；然后用这个树构建一个真正的DOM树，插到文档当中当状态变更的时候，重新构造一棵新的对象树。然后用新的树和旧的树进行比较，记录两棵树差异把记录的差异应用到真正的DOM树上，视图就更新了。
+1. 用JS对象结构表示DOM树的结构；然后用这个树构建一个真正的DOM树，插到文档当中。
+2. 当状态变更的时候，重新构造一棵新的对象树。然后用新的树和旧的树进行比较，记录两棵树差异。
+3. 把2所记录的差异应用到步骤1所构建的真正的DOM树上，视图就更新了。
 
-## [TODO] React Diff 算法
+## React Diff 算法原理（常考，大厂必考）
+
+- 把树形结构按照层级分解，只比较同级元素。
+- 把列表结构的每个单元添加唯一的key属性，方便比较。
+- React只会匹配相同class的component（这里的class指的是组件的名字）。
+- 合并操作，调用component的setState方法的时候，React将其标记为dirty。到每一个事件循环结束，React检查所有标记dirty的component重新绘制。
+- 选择性子树渲染。开发人员可以重写shouldComponentUpdate提高diff的性能。
+
+## React中refs的作用是什么？
+
+refs是React提供给我们的安全访问DOM元素或者某个组件实例的句柄。我们可以为元素添加ref属性然后在回调函数中接受该元素在DOM树中的句柄，该值会作为回调函数的第一个参数返回：
+
+```react
+class CustomForm extends Component {
+    handleSubmit = () => {
+        console.log("Input Value: ", this.input.value);
+    }
+    
+    render() {
+    	return (
+        	<form onSubmit={this.handleSubmit}>
+                <input 
+                    type = "text"
+                    ref = {(input) => this.input = input} />
+                <button type="submit">Submit</button>
+            </form>
+        )    
+    }
+}
+```
+
+上述代码中input域包含了一个ref属性，该属性声明的回调函数会接受input对应的DOM元素，我们将其绑定到this指针以便在其他的类函数中使用。另外值得一提的是，refs并不是类组件的专属，函数式组件同样能够利用闭包暂存其值：
+
+```react
+function CustomForm({handleSubmit}) {
+    let inputElement;
+    return (
+    	<form onSubmit={() => handleSubmit(inputElement.value)}>
+        	<input
+                type = "text"
+                ref = {(input) => inputElement = input} />
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+```
