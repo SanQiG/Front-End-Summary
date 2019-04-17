@@ -54,3 +54,7 @@ WeakMap的键名是对象的弱引用，键名所指向的对象不计入垃圾�
 ## 为什么typeof null返回"object"
 
 原理是不同的对象在底层都表示为二进制，在Javascript中**二进制前三位都为0的话会被判断为Object类型**，null的二进制表示全为0，自然前三位也是0，所以执行typeof时会返回"object"。
+
+## 前端路由实现原理
+
+[猛戳我](https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E8%B7%B3%E8%BD%AC%E5%8E%9F%E7%90%86.md)
