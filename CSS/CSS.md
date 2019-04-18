@@ -194,7 +194,7 @@ text-overflow: ellipsis;
     }
 }
 ```
-## background-origin作用
+## 17、background-origin作用
 
 背景定位原点background-origin是CSS3新添加的有关背景的属性，主要是**改变背景起始的原点位置**。
 
@@ -205,3 +205,15 @@ text-overflow: ellipsis;
 **`padding-box`**：背景图片的摆放以padding区域为参考
 
 **`content-box`**：背景图片的摆放以content区域为参考
+
+## 18、vw、vh、vmin、vmax的区别
+
+**vw**：1vw等于视口宽度的1%
+
+**vh**：1vh等于视口高度的1%
+
+**vmin**：选取vw和vh中最小的那个
+
+**vmax**：选取vw和vh中最大的那个
+
+vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用视口单位实现，依赖于视口大小而自动缩放，所以不同的设备视口大小不一样自然就达到的适配的效果。
