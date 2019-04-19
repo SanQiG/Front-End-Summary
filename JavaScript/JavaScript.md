@@ -571,9 +571,11 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   let str = "1312567.903000";
-  let reg = str.replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
+  str = str.replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
       return $1 + ',';
   })
+  
+  console.log(str);
   ```
 
   还可以
@@ -582,6 +584,8 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   let str = 1312567.903000;
   str.toLocaleString();  // 不过这种方法会自动进行四舍五入
   ```
+  
+  注：如果不带小数点的话就把`\.`换成`$`
   
 - ## 正则实现转换下划线命名法和驼峰命名法
 
