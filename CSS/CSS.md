@@ -1,5 +1,3 @@
-[TOC]
-
 ## 1、BFC
 
 详见[文章](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/CSS/BFC.md)
@@ -217,3 +215,25 @@ text-overflow: ellipsis;
 **vmax**：选取vw和vh中最大的那个
 
 vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用视口单位实现，依赖于视口大小而自动缩放，所以不同的设备视口大小不一样自然就达到的适配的效果。
+
+## 19、怎么实现图片的倒影效果
+
+```html
+<img src="images/pic.jpg" alt="" id="pic">
+```
+
+```css
+#pic {
+    -webkit-box-reflect: below;
+}
+```
+
+如果希望倒影和图片之间有间隙可以设置css样式：
+
+```css
+#pic {
+    -webkit-box-reflect: below 10px;
+}
+```
+
+
