@@ -130,3 +130,81 @@ function CustomForm({handleSubmit}) {
 - state是一种数据结构，用于组件挂载时所需数据的默认值。state可能会随着时间的推移而发生突变，但多数时候是作为用户事件行为的结果。
 - props则是组件的配置。props由父组件传递给子组件，并且就子组件而言，props是不可变的（immutable）。组件不能改变自身的props，但是可以把其子组件的props放在一起（统一管理）。props也不仅仅是数据--回调函数也可以通过props传递。
 
+## 何为受控组件
+
+在HTML中，类似`<input>`，`<textarea>`和`<select>`这样的表单元素会维护自身的状态，并基于用户的输入来更新。当用户提交表单时，前面提到的元素的值将随表单一起被发送。但在React中会有些不同，包含表单元素的组件将会在state中追踪输入的值，并且每次调用回调函数时，如onChange会更新state，重新渲染组件。一个输入表单元素，它的值通过React的这种方式来控制，这样的元素就被称为受控元素。
+
+## 何为高阶组件
+
+高阶组件是一个以组件为参数并返回一个新组件的函数。高阶组件运行你重用代码、逻辑和引导抽象。最常见的可能是Redux的connect函数。除了简单分享工具库和简单的组合，高阶组件最好的方式是共享React组件之间的行为。如果你发现你在不同的地方写了大量代码来做同一件事，就应该考虑将代码重构为可重用的高阶组件。
+
+## 为什么建议传递给setState的参数是一个callback而不是一个对象？
+
+因为this.props和this.state的更新可能是异步的，不能依赖它们的值去计算下一个state。
+
+## 除了在构造函数中绑定this，还有其它方式吗？
+
+你可以使用属性初始值设定项来正确绑定回调，create-react-app也是默认支持的。在回调中你可以使用箭头函数，但问题是每次组件渲染时都会创建一个新的回调。
+
+## 在构造函数中调用super(props)的目的是什么？
+
+在super()被调用之前，子类是不能使用this的，在ES6中，子类必须在constructor中调用super()。传递props给super()的原因则是便于（在子类中）能在constructor访问this.props。
+
+## 应该在React组件的何处发起Ajax请求？
+
+在React组件中，应该在componentDidMount中发起网络请求。这个方法会在组件第一次“挂载”（被添加到DOM）时执行，在组件的生命周期中仅会执行一次。更重要的是，你不能保证在组件挂载之前Ajax请求已经完成，如果是这样，也就意味着你将尝试在一个未挂载的组件上调用setState，这将不起作用。在componentDidMount中发起网络请求将保证这有一个组件可以更新了。
+
+## 描述事件在React中的处理方式
+
+为了解决跨浏览器兼容性问题，React中的事件处理程序将传递SyntheticEvent的实例，它是React的浏览器本机事件的跨浏览器包装器。
+
+这些SyntheticEvent与原生事件具有相同的接口，除了它们在所有浏览器中都兼容。有趣的是，React实际上并没有将事件附加到子节点本身。React将使用单个事件监听器监听顶层的所有事件。这对于性能是有好处的，这也意味着在更新DOM时，React不需要担心跟踪事件监听器。
+
+## createElement和cloneElement有什么区别？
+
+JSX语法就是用`React.createElement()`来构建React元素的。它接收三个参数，第一个参数可以是一个标签名。如div、span，或者React组件。第二个参数为传入的属性。第三个及以后的参数，皆作为组件的子组件。
+
+```react
+React.createElement(
+	type,
+    [props],
+    [...children]
+)
+```
+
+`React.cloneElement()`与`React.createElement()`相似，不同的是它传入的第一个参数是一个React元素，而不是标签名或组件。新添加的属性会并入原有的属性，传入到返回的新元素中，而旧的子元素将被替换。
+
+```react
+React.cloneElement(
+	element,
+    [props],
+    [...children]
+)
+```
+
+## React中有三种构建组件的方式
+
+`React.createClass()`、ES6 class和无状态函数。
+
+## react组件的划分业务组件和技术组件？
+
+- 根据组件的职责通常把组件分为UI组件和容器组件
+- UI组件负责UI的呈现，容器组件负责管理数据和逻辑
+- 两者通过React-Redux提供connect方法联系起来
+
+## 简述Flux思想
+
+Flux的最大特点，就是数据的**单向流动**。
+
+1. 用户访问View
+
+2. View发出用户的action
+
+3. Dispatcher收到Action，要求store进行相应的更新
+
+4. Store更新后，发出一个“change”事件
+
+5. View收到“change”事件后，更新页面
+
+## 了解Redux么，说一下Redux吧
+
