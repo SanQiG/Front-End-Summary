@@ -58,3 +58,12 @@ WeakMap的键名是对象的弱引用，键名所指向的对象不计入垃圾�
 ## 前端路由实现原理
 
 [猛戳我](https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E8%B7%B3%E8%BD%AC%E5%8E%9F%E7%90%86.md)
+
+## 假值列表有哪些？
+
+- `undefined`
+- `null`
+- `NaN`
+- `0`
+- `false`
+- `""`
