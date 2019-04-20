@@ -67,3 +67,55 @@ WeakMap的键名是对象的弱引用，键名所指向的对象不计入垃圾�
 - `0`
 - `false`
 - `""`
+
+## 阿里情景分析题：好比说你从后端拿到了一个对象，它的嵌套层级很深（可能要a.b.c.d.e.f.g）这样引用。但是传输过程中对象可能会损坏，可能a.b的属性c不见了（变成undefined了）。但如果还是像上面这样引用，就会变成向undefined请求属性，从而报错。
+
+> 要求：
+>
+> 不能报错
+>
+> 但是需要知道引用链从哪里断开的（上例就是a.b.c）
+>
+> 如果引用链断开了，从而没有拿到真实的值，请给出一个默认值
+
+- 方法一：利用try...catch的报错信息
+
+```javascript
+function getValueByPath(obj, path) {
+	try {
+		return (new Function('obj', `return obj.${path}`))(obj);
+	} catch (error) {
+		error = '' + error;
+		let idx1 = error.indexOf("'");
+		let idx2 = error.indexOf("'", idx1 + 1);
+		
+		let brokenString = error.substring(idx1 + 1, idx2);
+		let brokenIdx = path.indexOf(brokenString);
+
+		console.log(`chain was broken at obj.${path.substring(0, brokenIdx - 1)}`);
+		return undefined;
+	}
+}
+```
+
+- 方法二
+
+```javascript
+function getValueByPath3(obj, path) {
+	let names = path.split('.');
+	
+	var o = obj;
+	var tmpStr = "obj";
+
+	for (var i = 0; i < names.length; ++i) {
+		o = o[names[i]];
+		tmpStr += `.${names[i]}`;
+		if (typeof o === "undefined") {
+			console.log(`chain was broken at ${tmpStr}`);
+			return undefined;
+		}
+	}
+	return o;
+}
+```
+
