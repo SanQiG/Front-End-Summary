@@ -26,11 +26,11 @@
 
 ![](https://upload-images.jianshu.io/upload_images/3534156-55b43078fcef0bec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/598/format/webp)
 
-​	**CSS 如何设置这两种盒模型？**
+**CSS 如何设置这两种盒模型？**
 
-​		标准盒模型：`box-sizing: content-box;`
+标准盒模型：`box-sizing: content-box;`
 
-​		怪异盒模型：`box-sizing: border-box;`
+怪异盒模型：`box-sizing: border-box;`
 
 ## 6、Flex
 
@@ -236,4 +236,40 @@ vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用�
 }
 ```
 
+## 20、鼠标悬停下拉菜单
 
+```html
+<div class="drop-menu">
+	<div class="hover-btn">Hover me</div>
+	<div class="drop-content">
+		<a href="#">Link 1</a>
+		<a href="#">Link 2</a>
+		<a href="#">Link 3</a>
+	</div>
+</div>
+```
+
+```css
+.drop-menu {
+	position: relative;
+}
+.hover-btn {
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.drop-content {
+	display: none;
+	position: absolute;
+}
+.drop-content a {
+	display: block;
+}
+.drop-menu:hover .drop-content {
+	display: block;
+}
+```
