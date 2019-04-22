@@ -185,28 +185,26 @@ for (let key in target) {
 **优点**
 
 1. 无刷新更新数据
-
 2. 异步与服务器通信
-
 3. 前端和后端负载均衡
-
 4. 基于标准被广泛支持
-
 5. 界面与应用分离
 
 **缺点**
 
 1. Ajax干掉了Back和History功能，即对浏览器机制的破坏
-
 2. Ajax的安全问题
-
 3. 对搜索引擎支持较弱
-
 4. 破坏程序的异常处理机制
-
 5. 违背URL和资源定位的初衷
-
 6. Ajax不能很好支持移动设备
-
 7. 客户端过肥，太多客户端代码造成开发上的成本
 
+## Ajax如何携带cookie？
+
+```javascript
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "http://xxx.com/xxx", true);
+xhr.withCredentials = true;  // 支持跨域发送cookies
+xhr.send();
+```
