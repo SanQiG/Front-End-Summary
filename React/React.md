@@ -1,3 +1,5 @@
+## [Redux](https://github.com/SanQiG/Front-End-Summary/blob/master/React/Redux.md)
+
 ## React中keys的作用
 
 keys是React用于追踪那些列表中元素被修改、被添加或者被移除的辅助标识。
@@ -205,6 +207,4 @@ Flux的最大特点，就是数据的**单向流动**。
 4. Store更新后，发出一个“change”事件
 
 5. View收到“change”事件后，更新页面
-
-## 了解Redux么，说一下Redux吧
 
