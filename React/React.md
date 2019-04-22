@@ -1,84 +1,81 @@
-## [VDOM](https://github.com/SanQiG/Front-End-Summary/blob/master/React/VDOM.md)
+## [VDOM](<https://github.com/SanQiG/Front-End-Summary/blob/master/React/VDOM.md>)
 
-## [Redux](https://github.com/SanQiG/Front-End-Summary/blob/master/React/Redux.md)
+## [Redux](<https://github.com/SanQiG/Front-End-Summary/blob/master/React/Redux.md>)
 
-## React中keys的作用
+## React 优点是什么？
 
-keys是React用于追踪那些列表中元素被修改、被添加或者被移除的辅助标识。
+- JSX的引入，使得组件的代码更加可读，也更容易看懂组件的布局，或者组件之间是如何互相引用的
+- 支持服务器端渲染，可改进SEO和性能
+- 易于测试
+- React只关注View层，所以可以和其他任何框架（Backbone.js，Angular.js）一起使用
 
-```react
-render() {
-    return (
-    	<ul>
-            {this.state.todoItems.map(({item, key}) => {
-                return <li key={key}>{item}</li>
-            })}
-        </ul>
-    )
-}
-```
+## React 生命周期函数
 
-在开发过程中，我们需要保证某个元素的key在其同级元素中具有唯一性。在React Diff算法中React会借助元素的key值来判断该元素是新创建的还是被移动而来的元素，从而减少不必要的元素重新渲染。此外，React还需要借助key值来判断元素与本地状态的关联关系，因此我们绝不可忽视转换函数中Key的重要性。
-
-## 调用setState之后发生了什么？
-
-在代码中调用setState函数之后，React会传入的参数对象与组件当前的状态合并，然后触发所谓的调和过程。经过调和过程，React会以相对高效的方式根据新的状态构建React元素树并且着手重新渲染整个UI界面。在React得到元素树之后，React会自动计算出新的树与老树的节点差异，然后根据差异对界面进行最小化重渲染。在差异计算算法中，React能够相对精确地知道哪些位置发生了改变以及应该如何改变，这就保证了按需更新，而不是全部重新渲染。
-
-## React生命周期
-
-  React生命周期主要包括三个主要场景：
+React生命周期主要包括三个主要场景：
 
 - 装载（Mounting）：组件被插入 DOM 中
+
 - 更新（Updating）：组件重新渲染以更新 DOM
+
 - 卸载（Unmounting）：组件从 DOM 中移除
 
-  不同的场景会调用不同的生命周期方法，包含`will`的方法在某个时间节点**之前**执行，包含`did`方法在某个时间节点**之后**执行。
+不同的场景会调用不同的生命周期方法，包含`will`的方法在某个时间节点**之前**执行，包含`did`方法在某个时间节点**之后**执行。
 
 ### 初始渲染（装载）
 
-  生命周期函数             |  作用
-  ---------------------- | --------------------
-  **getDefaultProps**    | 获取实例的默认属性
-  **getInitialState**    | 获取每个实例的初始化状态
-  **componentWillMount** | 组件即将被装载、渲染到页面上
-  **render**             | 组件在这里生成虚拟的DOM节点
-  **componentDidMount**  | 组件真正在被装载之后
+| 生命周期函数           | 作用                         |
+| ---------------------- | ---------------------------- |
+| **getDefaultProps**    | 获取实例的默认属性           |
+| **getInitialState**    | 获取每个实例的初始化状态     |
+| **componentWillMount** | 组件即将被装载、渲染到页面上 |
+| **render**             | 组件在这里生成虚拟的DOM节点  |
+| **componentDidMount**  | 组件真正在被装载之后         |
 
 ### 更新
 
-  生命周期函数                    |  作用
-  ----------------------------- | -------------------------------
-  **componentWillReceiveProps** | 组件将要接受到属性的时候调用
-  **shouldComponentUpdate**     | 组件接受到新属性或者新状态的时候（可以返回false，接收数据后不更新，阻止render调用，后面的函数不会被继续执行了）
-  **componentWillUpdate**       | 组件即将更新不能修改属性和状态
-  **render**                    | 组件重新描绘
-  **componentDidUpdate**        | 组件已经更新
+| 生命周期函数                  | 作用                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| **componentWillReceiveProps** | 组件将要接受到属性的时候调用                                 |
+| **shouldComponentUpdate**     | 组件接受到新属性或者新状态的时候（可以返回false，接收数据后不更新，阻止render调用，后面的函数不会被继续执行了） |
+| **componentWillUpdate**       | 组件即将更新不能修改属性和状态                               |
+| **render**                    | 组件重新描绘                                                 |
+| **componentDidUpdate**        | 组件已经更新                                                 |
 
 ### 卸载
 
-  生命周期函数               |  作用
-  ------------------------ | ---------------------------
-  **componentWillUnmount** | 组件即将卸载
+| 生命周期函数             | 作用         |
+| ------------------------ | ------------ |
+| **componentWillUnmount** | 组件即将卸载 |
 
-## shouldComponentUpdate是做什么的（React性能优化是哪个周期函数）？
+## shouldComponentUpdate 是做什么的（React 性能优化是哪个周期函数）？
 
 shouldComponentUpdate这个方法用来判断是否需要调用render方法重新描绘dom。因为dom的描绘非常消耗性能，如果我们能在shouldComponentUpdate方法中能够写出更优化的dom diff算法，可以极大的提高性能。
 
-## 为什么虚拟DOM会提高性能？（必考）
+## 调用 setState 之后发生了什么？
 
-虚拟dom相当于在JS和真实的dom中间加了一个缓存，利用dom diff算法避免了没有必要的dom操作，从而提高性能。
+- 将传递给setState的对象合并到组件的当前状态，触发所谓的调和（Reconciliation）过程。
+- 然后生成新的元素树和旧的元素树使用Diff算法对比。
+- 根据对比差异对界面进行**最小化重渲染**。
 
-1. 用JS对象结构表示DOM树的结构；然后用这个树构建一个真正的DOM树，插到文档当中。
-2. 当状态变更的时候，重新构造一棵新的对象树。然后用新的树和旧的树进行比较，记录两棵树差异。
-3. 把2所记录的差异应用到步骤1所构建的真正的DOM树上，视图就更新了。
+（在差异计算算法中，React能够相对精确地知道哪些位置发生了改变以及应该如何改变，这就保证了**按需更新**，而不是全部重新渲染。）
 
-## React Diff 算法原理（常考，大厂必考）
+## setState 第二个参数的作用
 
-- 把树形结构按照层级分解，只比较同级元素。
-- 把列表结构的每个单元添加唯一的key属性，方便比较。
-- React只会匹配相同class的component（这里的class指的是组件的名字）。
-- 合并操作，调用component的setState方法的时候，React将其标记为dirty。到每一个事件循环结束，React检查所有标记dirty的component重新绘制。
-- 选择性子树渲染。开发人员可以重写shouldComponentUpdate提高diff的性能。
+**我们可以用该函数来监听渲染是否完成**。因为setState是一个异步的过程，所以说执行完setState之后不能立刻更改state里面的值。如果需要对state数据更改监听，setState提供第二个参数，就是用来监听state里面数据的更改，当数据更改完成，调用回调函数。
+
+## 为什么建议传递给 setState 的参数是一个 callback 而不是一个对象
+
+setState它是一个异步函数，他会合并多次修改，降低Diff算法的比对频率。这样也会提升性能。
+
+React内部会把JavaScript事件循环中的消息队列的同一个消息中的setState都进行合并以后再重新渲染组件。
+
+因为this.props和this.state的**更新是异步的，不能依赖它们的值去计算下一个state**。
+
+## React 中 key 的作用
+
+key是React用于追踪那些列表中元素被修改、被添加或者被移除的辅助标识。
+
+在开发过程中，我们需要保证某个元素的key在其同级元素中具有唯一性。在React Diff算法中React会借助元素的key值来判断该元素是新创建的还是被移动而来的元素，从而减少不必要的元素重新渲染。此外，React还需要借助key值来判断元素与本地状态的关联关系，因此我们绝不可忽视转换函数中Key的重要性。
 
 ## React中refs的作用是什么？
 
@@ -190,7 +187,7 @@ React.cloneElement(
 
 `React.createClass()`、ES6 class和无状态函数。
 
-## react组件的划分业务组件和技术组件？
+## React组件的划分业务组件和技术组件？
 
 - 根据组件的职责通常把组件分为UI组件和容器组件
 - UI组件负责UI的呈现，容器组件负责管理数据和逻辑
@@ -209,4 +206,5 @@ Flux的最大特点，就是数据的**单向流动**。
 4. Store更新后，发出一个“change”事件
 
 5. View收到“change”事件后，更新页面
+
 
