@@ -303,7 +303,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   Function.prototype.call = function(context) {
-      let context = context || window;
+      context = context || window;
       context.fn = this;
       
       let args = [];
@@ -320,7 +320,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   Function.prototype.apply = function(context, arr) {
-      let context = context || window;
+      context = context || window;
       context.fn = this;
       
       let result;
