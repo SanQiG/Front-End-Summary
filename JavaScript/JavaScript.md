@@ -562,7 +562,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   let str = "1312567.903000";
-  let reg = /(?=(\B\d{3})+\.)/g;
+  let reg = /\B(?=(\d{3})+\.)/g;
   
   console.log(str.replace(reg, ","));
   ```
