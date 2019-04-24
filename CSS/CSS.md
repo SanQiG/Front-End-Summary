@@ -273,3 +273,17 @@ vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用�
 	display: block;
 }
 ```
+
+## 21、伪类和伪元素的区别？都有哪些？
+
+伪类和伪元素的区别在于：有没有创建一个文档树之外的元素。
+
+伪类：`:link`、`:visited`、`:hover`、`:active`、`:first-child`、`:nth-child()`、`:nth-of-type()`等。
+
+伪元素：`::before`、`::after`、`::first-letter`、`::first-line`、`::selection`等。
+
+## 22、`:nth-child()`和`:nth-of-type()`区别有哪些？
+
+1. 在不指定类型时，`:nth-child(n)`选中父元素下的第n个子元素；`:nth-of-type(n)`选中的是父元素下不同标签类型的第n个。
+
+2. `ele:nth-child(n)`要求不仅仅是第n个子元素，并且这个子元素标签名是`ele`；`ele:nth-of-type(n)`选择的是父元素下ele标签的第n个。
