@@ -208,3 +208,19 @@ xhr.open("POST", "http://xxx.com/xxx", true);
 xhr.withCredentials = true;  // 支持跨域发送cookies
 xhr.send();
 ```
+
+## Proxy 比 `Object.defineProperty()` 好在哪儿？
+
+Proxy可以监听对象身上发生了什么，并在这些事情发生后执行一些相应的操作。一下子让我们对一个对象有了很强的追踪能力，同时在数据绑定方面也很有用处。
+
+1. Proxy可以直接监听对象而非属性
+
+2. Proxy可以直接监听数组的变化
+
+3. Proxy有多达13种拦截方法，apply、ownKeys、deleteProperty、has等等是`Object.defineProperty()`不具备的
+
+4. Proxy返回一个新对象，我们可以只操作新的对象达到目的，而`Object.defineProperty()`只能遍历对象属性直接修改
+
+5. Proxy作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利
+
+6. Proxy的缺点就是兼容性问题
