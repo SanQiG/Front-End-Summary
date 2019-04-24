@@ -287,3 +287,56 @@ vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用�
 1. 在不指定类型时，`:nth-child(n)`选中父元素下的第n个子元素；`:nth-of-type(n)`选中的是父元素下不同标签类型的第n个。
 
 2. `ele:nth-child(n)`要求不仅仅是第n个子元素，并且这个子元素标签名是`ele`；`ele:nth-of-type(n)`选择的是父元素下ele标签的第n个。
+
+## 23、使一个div填充整个屏幕的方法
+
+1. 给div设置定位
+
+```css
+div {
+	width: 100%;
+	height: 100%;
+	background: yellow;
+	position: absolute;
+}
+```
+
+2. 通过html，body的宽高来让div充满屏幕
+
+```css
+* {
+	margin: 0;
+	padding: 0;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+}
+div {
+	width: 100%;
+	height: 100%;
+	background: red;
+}
+```
+
+## 24、实现嵌套边框
+
+```css
+div {
+	background: steelblue;
+	min-width: 300px;
+	min-height: 300px;
+	box-shadow: inset 0 0 20px #0f0;
+	border: 10px solid black;
+}
+```
+
+```css
+div {
+	background: steelblue;
+	min-width: 300px;
+	min-height: 300px;
+	border: 10px solid yellow;
+	outline: red solid 10px;
+}
+```
