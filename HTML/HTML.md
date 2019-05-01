@@ -1,5 +1,7 @@
 ## HTML5 为什么只需要写`<!DOCTYPE HTML>`
 
+![什么是DOCTYPE？](https://zhuanlan.zhihu.com/p/32609899)
+
 HTML5不基于SGML，因此不需要对DTD进行引用，但是需要doctype来规范浏览器的行为。
 
 而HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器文档所使用的文档类型。
