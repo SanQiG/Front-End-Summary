@@ -146,13 +146,12 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   - 在 `==` 中`null` 和 `undefined` 相等（他们也与自身相等），除此之外其他值都不存在这种情况
   - 对象和非对象之间的比较，调用`ToPrimitive`将对象转换为原始类型，`ToPrimitive`操作规则如下：
 
-  > **`ToPrimitive(obj)`**等价于：先计算**`obj.valueOf()`**，如果为原始值，则返回此结果；
-  >
-  > 否则，计算`**obj.toString()**`，如果结果是原始值，则返回此结果；否则，抛出异常。
+  > **`ToPrimitive(obj)`**等价于：先计算 **`obj.valueOf()`**，如果为原始值，则返回此结果；
+  > 否则，计算 **`obj.toString()`**，如果结果是原始值，则返回此结果；否则，抛出异常。
 
-- ## `var`和 `let` 区别
+- ## `var` 和 `let` 区别
 
-  1. ES6 可以用let定义块级作用域变量
+  1. ES6可以用let定义块级作用域变量
   2. let配合for循环的独特应用
   3. let没有变量提升和暂时性死区
   4. let变量不能重复声明
@@ -161,16 +160,16 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/Promise.md)
 
-- ## [TODO]事件循环机制
+- ## [TODO] 事件循环机制
 
   具体看[这里](https://github.com/SanQiG/Front-End-Summary/blob/master/JavaScript/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6.md)
 
-- ## `this`的指向  
+- ## `this` 的指向
 
   - 在调用函数时使用`new`关键字，函数内的`this`是一个全新的对象
   - 如果`apply`、`call`或`bind`方法用于调用、创建一个函数，函数内部的`this`就是作为参数传入这些方法的对象
   - 当函数作为对象里的方法被调用时，函数内的`this`是调用该函数的对象。
-  - 如果调用函数不符合上述规则，那么`this`的值指向全局对象。非严格模式下，`this`指向`window`对象，但在非严格模式下，`this`的值是`undefined`。
+  - 如果调用函数不符合上述规则，那么`this`的值指向全局对象。非严格模式下，`this`指向`window`对象，但在严格模式下，`this`的值是`undefined`。
   - 如果符合上述多个规则，则较高的规则（从上到下依次减小）将决定`this`的值
   - 如果函数是箭头函数，将忽略上面的所有规则，`this`被设置为它被创建时的上下文
 
@@ -202,8 +201,8 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   ```js
   const push = Array.prototype.push;
   Array.prototype.push = ((val) => {
-      console.log(val);
-      push.call(this, val);
+    console.log(val);
+    push.call(this, val);
   })
   ```
   
@@ -231,35 +230,35 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   ```javascript
   // 深度策略
   function flattern(arr) {
-      return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flattern(cur) : cur), []);
+    return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flattern(cur) : cur), []);
   }
   ```
 
   ```javascript
   // 广度策略
   function flattern(arr) {
-      while (arr.some(item => Array.isArray(item))) {
-          arr = [].concat(...arr);
-      }
-      return arr;
+    while (arr.some(item => Array.isArray(item))) {
+      arr = [].concat(...arr);
+    }
+    return arr;
   }
   ```
 
   ```javascript
   function flattern(arr) {
-      return arr.toString().split(',').map((item) => +item);
+    return arr.toString().split(',').map((item) => +item);
   }
   ```
 
   ```javascript
   function iterTree(tree) {
-      if (Array.isArray(tree)) {
-          for (let i = 0; i < tree.length; ++i) {
-              yield* iterTree(tree[i]);
-          }
-      } else {
-          yield tree;
+    if (Array.isArray(tree)) {
+      for (let i = 0; i < tree.length; ++i) {
+        yield* iterTree(tree[i]);
       }
+    } else {
+      yield tree;
+    }
   }
   ```
 
@@ -267,22 +266,22 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   function unique(arr) {
-      return arr.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
+    return arr.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
   }
   ```
 
   ```javascript
   function unique(arr) {
-      return array.filter((item, index, array) => array.indexOf(item) === index);
+    return array.filter((item, index, array) => array.indexOf(item) === index);
   }
   ```
 
   ```javascript
   function unique(arr) {
-      let obj = {};
-      return arr.filter((item, index, arr) => {
-          return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true);
-      })
+    let obj = {};
+    return arr.filter((item, index, arr) => {
+      return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true);
+    });
   }
   ```
 
@@ -294,8 +293,8 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function unique(arr) {
-      let seen = new Map();
-      return arr.filter((a) => !seen.has(a) && seen.set(a, 1));
+    let seen = new Map();
+    return arr.filter((a) => !seen.has(a) && seen.set(a, 1));
   }
   ```
 
@@ -303,38 +302,38 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   Function.prototype.call = function(context) {
-      context = context || window;
-      context.fn = this;
-      
-      let args = [];
-      for (let i = 1; i < arguments.length; ++i) {
-          args.push('arguments[' + i + ']');
-      }
-      
-      let result = eval('context.fn(' + args + ')');
-      
-      delete context.fn;
-      return result;
+    context = context || window;
+    context.fn = this;
+    
+    let args = [];
+    for (let i = 1; i < arguments.length; ++i) {
+      args.push('arguments[' + i + ']');
+    }
+    
+    let result = eval('context.fn(' + args + ')');
+    
+    delete context.fn;
+    return result;
   }
   ```
 
   ```javascript
   Function.prototype.apply = function(context, arr) {
-      context = context || window;
-      context.fn = this;
-      
-      let result;
-      if (!arr) {
-          result = context.fn();
-      } else {
-          let args = [];
-          for (let i = 0, len = arr.length; i < len; ++i) {
-              args.push('arr[' + i + ']');
-          }
-          result = eval('context.fn(' + args + ')');
+    context = context || window;
+    context.fn = this;
+    
+    let result;
+    if (!arr) {
+      result = context.fn();
+    } else {
+      let args = [];
+      for (let i = 0, len = arr.length; i < len; ++i) {
+        args.push('arr[' + i + ']');
       }
-      delete context.fn;
-      return result;
+      result = eval('context.fn(' + args + ')');
+    }
+    delete context.fn;
+    return result;
   }
   ```
   
@@ -342,16 +341,16 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   Function.prototype.bind = function(ctx) {
-      let self = this;
-      let args = Array.prototype.slice.call(arguments, 1);
-      
-      let fBound = function() {
-          let bindArgs = Array.prototype.slice.call(arguments);
-          return self.apply(this instanceof fBound ? this : ctx, args.concat(bindArgs));
-      }
-      
-      fBound.prototype = self.prototype;
-      return fBound;
+    let self = this;
+    let args = Array.prototype.slice.call(arguments, 1);
+    
+    let fBound = function() {
+      let bindArgs = Array.prototype.slice.call(arguments);
+      return self.apply(this instanceof fBound ? this : ctx, args.concat(bindArgs));
+    }
+    
+    fBound.prototype = self.prototype;
+    return fBound;
   }
   ```
 
@@ -364,16 +363,16 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   function New(fn) {
-      let res = {};
-      res.prototype = fn.prototype;
-      
-      let ret = fn.apply(res, Array.prototype.slice.call(arguments, 1));
-      
-      if ((typeof ret == "function" || typeof ret == "object") && ret !== null) {
-          return ret;
-      }
-      
-      return res;
+    let res = {};
+    res.prototype = fn.prototype;
+    
+    let ret = fn.apply(res, Array.prototype.slice.call(arguments, 1));
+    
+    if ((typeof ret == "function" || typeof ret == "object") && ret !== null) {
+      return ret;
+    }
+    
+    return res;
   }
   ```
   
@@ -383,12 +382,12 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function shallowCopy(obj) {
-      if (typeof obj !== 'object') return;
-      let newObj = obj instanceof Array ? [] : {};
-      for (let key in obj) {
-          if (obj.hasOwnProperty(key)) newObj[key] = obj[key];
-      }
-      return newObj;
+    if (typeof obj !== 'object') return;
+    let newObj = obj instanceof Array ? [] : {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) newObj[key] = obj[key];
+    }
+    return newObj;
   }
   ```
 
@@ -396,12 +395,12 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function deepCopy(obj) {
-      if (typeof obj !== 'object') return;
-      let newObj = obj instanceof Array ? [] : {};
-      for (let key in obj) {
-          if (obj.hasOwnProperty(key)) newObj[key] = typeof obj[key] === "object" ? deepCopy(obj[key]) : obj[key];
-      }
-      return newObj;
+    if (typeof obj !== 'object') return;
+    let newObj = obj instanceof Array ? [] : {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) newObj[key] = typeof obj[key] === "object" ? deepCopy(obj[key]) : obj[key];
+    }
+    return newObj;
   }
   ```
 
@@ -411,16 +410,17 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```javascript
   let request;
-  if (window.XMLHttpRequest) request = new XMLHttpRequest();
-  else request = new ActiveXObject("Microsoft.XMLHTTP");
+  if (window.XMLHttpRequest)
+    request = new XMLHttpRequest();
+  else
+    request = new ActiveXObject('Microsoft.XMLHTTP');
   
-  request.onreadystatechange = function() {
-    if (request.readyState == 4 && request.status == 200) {
-      callback(request.responseText);
-    }
+  request.onreadystatechange = () => {
+    if (request.readyState === 4 && request.status === 200)
+      cb(request.response);
   }
-  
-  request.open("GET", url);
+
+  request.open('GET', url);
   request.send();
   ```
   
@@ -429,29 +429,30 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   ```javascript
   let request;
   // 1.创建一个XMLHttpRequest对象
-  if (window.XMLHttpRequest) request = new XMLHttpRequest();
-  else request = new ActiveXObject("Microsoft.XMLHTTP");
+  if (window.XMLHttpRequest)
+    request = new XMLHttpRequest();
+  else
+    request = new ActiveXObject('Microsoft.XMLHTTP');
   
   // 2.设置回调监听
-  request.onreadystatechange = function() {
-    if (request.readyState == 4 && request.status == 200) {
+  request.onreadystatechange = () => {
+    if (request.readyState == 4 && request.status == 200)
       callback(request.responseText);
-    }
   }
   
   // 3.打开一个链接
-  request.open("POST", url);
+  request.open('POST', url);
   
   // 4.设置请求头（GET没有该步骤）
-  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   
   // 5.发送请求（参数: 具体发送的值）
-  request.send("name=value&age=12");
+  request.send('name=value&age=12');
   ```
 
 - ## 防抖与节流
 
-  先来讲讲**防抖**：你尽管触发事件，但是我**一定在事件触发n秒后再执行**，如果你在一个事件触发的n秒内又触发了这个事件，那我就以新的事件的事件为标准，n秒后才执行，总之，就是要等你触发完事件n秒内不在触发事件。
+  1. 先来讲讲**防抖**：你尽管触发事件，但是我**一定在事件触发n秒后再执行**，如果你在一个事件触发的n秒内又触发了这个事件，那我就以新的事件的事件为标准，n秒后才执行，总之，就是要等你触发完事件n秒内不再触发事件。
 
   ```javascript
   function debounce(func, wait) {
@@ -468,7 +469,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   }
   ```
 
-  再在介绍**节流**：如果你持续触发事件，每隔一段时间，只执行一次事件。有两种主流的实现方式，一种是**时间戳**，一种是设置**定时器**。
+  2. 再来介绍**节流**：如果你持续触发事件，每隔一段时间，只执行一次事件。有两种主流的实现方式，一种是**时间戳**，一种是**定时器**。
 
   ​	*时间戳*
 
@@ -514,7 +515,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   同步是阻塞模式，异步是非阻塞模式。
 
   - 同步就是指一个进程在执行某个请求的时候，若该请求需要一段时间才能返回信息，那么这个进程将会一直等待下去，知道收到返回信息才继续执行下去
-  - 异步是指进程不需要一直等下去，而是继续执行下面的操作，不管其他进程的状态。当有消息返回时系统会通知进程进行处理，这样可以提高执行的效率。
+  - 异步是指进程不需要一直等下去，而是继续执行下面的操作，不管其他进程的状态。当有消息返回时系统会通知进程进行处理，这样可以提高执行的效率
   
 - ## 一道面试题引发的思考
 
@@ -531,7 +532,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function get(data, ...args) {
-      return args.map(item => (new Function('data', `try {return data.${item}} catch(e) {}`))(data));
+    return args.map(item => (new Function('data', `try {return data.${item}} catch(e) {}`))(data));
   }
   ```
 
@@ -539,14 +540,14 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function get (data, ...args) {
-      return args.map(item => {
-          let res = data;
-          item.replace(/\[/g, '.')
-          	.replace(/\]/g, '')
-          	.split('.')
-          	.map(path => res = res && res[path]);
-          return res;
-      })
+    return args.map(item => {
+      let res = data;
+      item.replace(/\[/g, '.')
+          .replace(/\]/g, '')
+          .split('.')
+          .map(path => res = res && res[path]);
+      return res;
+    });
   }
   ```
 
@@ -554,7 +555,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   function get(data, ...args) {
-      return args.map(item => eval('data.' + item));
+    return args.map(item => eval('data.' + item));
   }
   ```
 
@@ -572,7 +573,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   ```js
   let str = "1312567.903000";
   str = str.replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
-      return $1 + ',';
+    return $1 + ',';
   })
   
   console.log(str);
@@ -593,9 +594,9 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
     ```js
     function toHump(str) {
-        return str.replace(/\_([a-z])/g, function($0, $1) {
-            return $1.toUpperCase();
-        })
+      return str.replace(/\_([a-z])/g, function($0, $1) {
+        return $1.toUpperCase();
+      });
     }
     ```
 
@@ -603,18 +604,18 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
     ```js
     function toLine(str) {
-        return str.replace(/[A-Z]/g, function($0) {
-            return '_' + $0.toLowerCase();
-        })
+      return str.replace(/[A-Z]/g, function($0) {
+        return '_' + $0.toLowerCase();
+      });
     }
     ```
 
 - ## 下面的代码输出什么？为什么？
 
   ```js
-  Function,prototype.a = 'a';
+  Function.prototype.a = 'a';
   Object.prototype.b = 'b';
-  function Person() {}
+  function Person() {};
   var p = new Person();
   console.log('p.a: ' + p.a);  // undefined，因为new出来的p是一个对象
   console.log('p.b: ' + p.b);  // b
@@ -624,23 +625,23 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   async function async1() {
-      console.log("a");
-      await async2();
-      console.log("b");
+    console.log("a");
+    await async2();
+    console.log("b");
   }
   async function async2() {
   	console.log("c");
   }
   console.log("d");
   setTimeout(function () {
-      console.log("e");
+    console.log("e");
   }, 0);
   async1();
   new Promise(function (resolve) {
-      console.log("f");
-      resolve();
+    console.log("f");
+    resolve();
   }).then(function () {
-      console.log("g");
+    console.log("g");
   });
   console.log("h");
   // d a c f h b g e
@@ -653,12 +654,12 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   
   async function main() {
   	console.log(1);
-      await side();
-      console.log(4);
+    await side();
+    console.log(4);
   }
   
   async function side() {
-      console.log(2);
+    console.log(2);
   }
   
   main();
@@ -741,7 +742,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
   ```js
   fetch(url).then(function(response) {
-      return response.json();  // 执行成功第一步
+    return response.json();  // 执行成功第一步
   }).then(function(val) {
       // 执行成功第二步
   }).catch(function(err) {
@@ -809,7 +810,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
 
     ```javascript
     if (JSON.stringify(obj) == "{}") {
-        return true;
+      return true;
     }
     return false;
     ```
@@ -850,7 +851,7 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   function sum(a) {
     return function(b) {
       return function(c) {
-        return a+b+c;
+        return a + b + c;
       }
     }
   }
