@@ -63,7 +63,7 @@
 
   开发者可以用很多方式来减轻这些问题的症状，但是彻底解决，这个、基本、很难。
 
-  归根到底，问题的根源在于**时机**。对于前段开发者来说，setTimeout 和 setInterval 提供的是一个等长的定时器循环（timer loop），但是对于浏览器内核对渲染函数的响应以及何时能够发起下一个动画帧的时机，是完全不了解的。对于浏览器内核来讲，它能够了解发起下一个渲染帧的合适时机，但是对于任何 setTimeout 和 setInterval 传入的回调函数执行，都是一视同仁的，它很难知道哪个回调函数是用于动画渲染的，因此，优化的时机非常难以掌握。悖论就在于，写JavaScript的人了解一帧动画在哪行代码开始，哪行代码结束，却不了解应该何时开始，应该何时结束，而对内核引擎来说，事情却恰恰相反，所以二者很难完美配合，直到`requestAnimationFrame()`出现。
+  归根到底，问题的根源在于**时机**。对于前端开发者来说，setTimeout 和 setInterval 提供的是一个等长的定时器循环（timer loop），但是对于浏览器内核对渲染函数的响应以及何时能够发起下一个动画帧的时机，是完全不了解的。对于浏览器内核来讲，它能够了解发起下一个渲染帧的合适时机，但是对于任何 setTimeout 和 setInterval 传入的回调函数执行，都是一视同仁的，它很难知道哪个回调函数是用于动画渲染的，因此，优化的时机非常难以掌握。悖论就在于，写JavaScript的人了解一帧动画在哪行代码开始，哪行代码结束，却不了解应该何时开始，应该何时结束，而对内核引擎来说，事情却恰恰相反，所以二者很难完美配合，直到`requestAnimationFrame()`出现。
 
   
 
@@ -109,26 +109,26 @@ let mouseX = mouseY = undefined,
     sourceX = sourceY = undefined;
 
 function start(e) {
-    mouseX = e.pageX;
-    mouseY = e.pageY;
-    sourceX = parseInt(getComputedStyle(e.target, null).left);
-    sourceY = parseInt(getComputedStyle(e.target, null).top);
-    
-    document.addEventListener("mousemove", move, false);
-    document.addEventListener("mouseup", end, false);
+  mouseX = e.pageX;
+  mouseY = e.pageY;
+  sourceX = parseInt(getComputedStyle(e.target, null).left);
+  sourceY = parseInt(getComputedStyle(e.target, null).top);
+  
+  document.addEventListener("mousemove", move, false);
+  document.addEventListener("mouseup", end, false);
 }
 
 function move(e) {
-    let disX = e.pageX - mouseX;
-    let disY = e.pageY - mouseY;
-    
-    ball.style.top = sourceY + disY + "px";
-    ball.style.left = sourceX + disX + "px";
+  let disX = e.pageX - mouseX;
+  let disY = e.pageY - mouseY;
+  
+  ball.style.top = sourceY + disY + "px";
+  ball.style.left = sourceX + disX + "px";
 }
 
 function end(e) {
-    document.removeEventListener("mousemove", move, false);
-    document.removeEventListener("mouseup", end, false);
+  document.removeEventListener("mousemove", move, false);
+  document.removeEventListener("mouseup", end, false);
 }
 
 ball.addEventListener("mousedown", start, false);
@@ -154,10 +154,10 @@ ball.addEventListener("mousedown", start, false);
   ```
   ```css
   img {
-      display: block;
-      width: 400px;
-      height: 400px;
-      margin-bottom: 50px;
+    display: block;
+    width: 400px;
+    height: 400px;
+    margin-bottom: 50px;
   }
   ```
 
@@ -173,16 +173,16 @@ ball.addEventListener("mousedown", start, false);
   window.scroll = throttle(lazyload, 500);
   
   function lazyload() {
-  	let seeHeight = document.documentElement.clientHeight;  // 可视区域高度
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;  // 滚动条距离顶部高度
-      for (let i = n; i < num; ++i) {
-          if (img[i].offsetTop < seeHeight + scrollTop) {
-              if (img[i].getAttribute("src") == "default.jpg") {
-                  img[i].src = img[i].getAttribute("data-src");
-              }
-              n = i + 1;
-          }
+    let seeHeight = document.documentElement.clientHeight;  // 可视区域高度
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;  // 滚动条距离顶部高度
+    for (let i = n; i < num; ++i) {
+      if (img[i].offsetTop < seeHeight + scrollTop) {
+        if (img[i].getAttribute("src") == "default.jpg") {
+          img[i].src = img[i].getAttribute("data-src");
+        }
+        n = i + 1;
       }
+    }
   }
   
   function throttle(fn, wait) {  // 时间戳节流函数
@@ -209,18 +209,18 @@ ball.addEventListener("mousedown", start, false);
   ```javascript
   let box = document.getElementById("box");
   function animate(ele) {
-      let start = Date.now();
-      let timer = setInterval(function() {
-          let timePassed = Date.now() - start;
-          if (timePassed >= 5000) {
-              clearInterval(timer);
-              return;
-          } else if (timePassed < 2500) {
-              ele.style.left = ele.offsetLeft + 2 + "px";
-          } else if (timePassed < 5000) {
-              ele.style.left = ele.offsetLeft + 1 + "px";
-          }
-      }, 1);
+    let start = Date.now();
+    let timer = setInterval(function() {
+      let timePassed = Date.now() - start;
+      if (timePassed >= 5000) {
+        clearInterval(timer);
+        return;
+      } else if (timePassed < 2500) {
+        ele.style.left = ele.offsetLeft + 2 + "px";
+      } else if (timePassed < 5000) {
+        ele.style.left = ele.offsetLeft + 1 + "px";
+      }
+    }, 1);
   }
   animate(box);
   ```
@@ -229,22 +229,22 @@ ball.addEventListener("mousedown", start, false);
 
   ```javascript
   function getelementbyid(node, id) {
-      if (!node) return null;
-      if (node.id == id) return node;
-      for (let i = 0; i < node.children.length; ++i) {
-      	let found = getelementbyid(node.children[i], id);
-      	if (found) return found;
-      }
-      return null;
+    if (!node) return null;
+    if (node.id == id) return node;
+    for (let i = 0; i < node.children.length; ++i) {
+      let found = getelementbyid(node.children[i], id);
+      if (found) return found;
+    }
+    return null;
   }
   ```
 
-- ## 封装 getElementsByClassname
+- ## 封装 getElementsByTagname
 
   ```javascript
   let res = []
   function getelementsbytagname(node tagName) {
-      if (!node) return null;
+    if (!node) return null;
   	if (node.tagName.toLowerCase() == tagName) res.push(node);
   	for (let i = 0; i < node.children.length; ++i) {
   		getelementsbytagname(node.children[i], tagName);
