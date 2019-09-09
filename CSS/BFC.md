@@ -137,8 +137,3 @@ float 属性定义元素在哪个方向上浮动。以往这个属性总应用�
 ![](https://lc-gold-cdn.xitu.io/5994ed11ebc3e4b971db.gif?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 从上图可以看到，float 属性确实生效，将 float 隐藏后，下面还有一个红色的 div，这个 div 是被黑色 div 所覆盖掉的。**div 会被 float 覆盖，而文本却没有被 float 覆盖**，是因为 **float 当初设计的时候就是为了使文本围绕在浮动对象的周围。**
-
-***
-
-## 完
-

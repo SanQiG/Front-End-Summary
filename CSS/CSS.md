@@ -51,20 +51,11 @@
 
 在写样式时，我会使用较低的优先级，这样这些样式可以轻易地覆盖掉。尤其对写 UI 组件的时候更为重要，这样使用者就不需要通过非常复杂的优先级规则或使用 `!important` 的方式，去覆盖组件的样式了。
 
-## 8、请阐述 `z-index`属性，并说明如何形成层叠上下文（stacking context）。
-
-
+## 8、[TODO]请阐述 `z-index`属性，并说明如何形成层叠上下文（stacking context）。
 
 ## 9、[TODO]层叠顺序和堆栈上下文
 
 ![](https://images2015.cnblogs.com/blog/608782/201609/608782-20160923104742809-2054066790.png)
-
-**准确的 7 层为：**
-
-	1. 形成堆叠上下文环境的元素的背景与边框
-	2. 拥有负 `z-index` 的子堆叠上下文元素（负的越高堆叠层级越低）
-	3. 正常流式布局，非 `inline-block`，无 `position` 定位（static除外）的子元素
-	4. 无 `position` 定位的
 
 ## 10、有哪些清除浮动的技术？
 
@@ -72,13 +63,13 @@
 
 - **自定义一个 `.clearfix` 类，利用伪元素选择器`::after` 清除浮动**：
 
-  ```css
-  .clearfix::after {
-      content: "";
-      display: block;
-      clear: both;
-  }
-  ```
+	```css
+	.clearfix::after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+	```
 
 - `overflow: auto` 或 `overflow: hidden` **触发 BFC**
 
@@ -88,23 +79,23 @@
 /*三角形*/
 #box {
 	width: 0;
-    height: 0;
-    border: 50px solid transparent;
-    border-bottom: 50px solid steelblue;
+	height: 0;
+	border: 50px solid transparent;
+	border-bottom: 50px solid steelblue;
 }
 /*梯形*/
 #box {
 	width: 50px;
-    height: 0;
-    border: 50px solid transparent;
-    border-bottom: 50px solid steelblue;
+	height: 0;
+	border: 50px solid transparent;
+	border-bottom: 50px solid steelblue;
 }
 /*平行四边形，如需让内容保持不倾斜，只需再嵌套一层div然后倾斜45度就好*/
 #box {
 	width: 200px;
-    height: 100px;
-    transform: skew(-45deg);
-    background: steelblue;
+	height: 100px;
+	transform: skew(-45deg);
+	background: steelblue;
 }
 ```
 
@@ -127,10 +118,10 @@ text-overflow: ellipsis;
 
 **rem** 是css3新增的一个相对单位（root em），rem 与 em 的区别在于使用rem为元素设定字体大小时，仍然是相对大小，但相对的是HTML根元素。这个单位可谓集相对大小和绝对大小的优点于一身，通过它既可以做到只修改根元素就成比例地调整所有字体大小，又可以避免字体大小逐层复合地连锁反应。
 
-## 15、`relative`、`fixed`、`absolute`和`static`四种定位有什么区别？
+## 15、`static`、`relative`、`absolute` 和 `fixed`四种定位有什么区别？
 
-- `static`：默认定位属性值。该关键字指定元素使用正常的布局行为，即元素在文档常规流中当前的布局位置。此时top，bottom，left和z-index属性无效。
-- `relative`：元素先放置在未添加定位时的位置，再在不改变页面布局的前提下调整元素位置，因此会在此元素未添加定位时所在位置留下空白）。
+- `static`：默认定位属性值。该关键字指定元素使用正常的布局行为，即元素在文档常规流中当前的布局位置。此时top，bottom，left，right和z-index属性无效。
+- `relative`：元素先放置在未添加定位时的位置，再在不改变页面布局的前提下调整元素位置，因此会在此元素未添加定位时所在位置留下空白。
 - `absolute`：不为元素预留空间，通过指定元素相对于最近的非static定位祖先元素的偏移，来确定元素位置。绝对定位的元素可以设置外边距，且不会与其他边距合并。
 - `fixed`：不为元素预留空间，通过指定元素相对于屏幕视口的位置来指定元素位置。元素的位置在屏幕滚动时不会改变。fixed 属性会创建新的层叠上下文。当元素祖先的 transform 属性非 none 时，容器由视口改为该祖先。
 
@@ -138,58 +129,58 @@ text-overflow: ellipsis;
 
 ```html
 <div id="euro">
-    <div class="back"></div>
-    <div class="middle" style="transform: translateZ(1px)"></div>
-    <div class="middle" style="transform: translateZ(2px)"></div>
-    <div class="middle" style="transform: translateZ(3px)"></div>
-    <div class="middle" style="transform: translateZ(4px)"></div>
-    <div class="middle" style="transform: translateZ(5px)"></div>
-    <div class="middle" style="transform: translateZ(6px)"></div>
-    <div class="middle" style="transform: translateZ(7px)"></div>
-    <div class="middle" style="transform: translateZ(8px)"></div>
-    <div class="middle" style="transform: translateZ(9px)"></div>
-    <div class="front" style="transform: translateZ(10px)"></div>
+	<div class="back"></div>
+	<div class="middle" style="transform: translateZ(1px)"></div>
+	<div class="middle" style="transform: translateZ(2px)"></div>
+	<div class="middle" style="transform: translateZ(3px)"></div>
+	<div class="middle" style="transform: translateZ(4px)"></div>
+	<div class="middle" style="transform: translateZ(5px)"></div>
+	<div class="middle" style="transform: translateZ(6px)"></div>
+	<div class="middle" style="transform: translateZ(7px)"></div>
+	<div class="middle" style="transform: translateZ(8px)"></div>
+	<div class="middle" style="transform: translateZ(9px)"></div>
+	<div class="front" style="transform: translateZ(10px)"></div>
 </div>
 ```
 
 ```css
 #euro {
-    width: 150px;
-    height: 150px;
-    margin-left: -75px;
-    margin-top: -75px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-style: preserve-3d;
-    animation: spin 2.5s linear infinite;
+	width: 150px;
+	height: 150px;
+	margin-left: -75px;
+	margin-top: -75px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform-style: preserve-3d;
+	animation: spin 2.5s linear infinite;
 }
 .back {
-    background-image: url("images/backeuro.png");
-    width: 150px;
-    height: 150px;
+	background-image: url("images/backeuro.png");
+	width: 150px;
+	height: 150px;
 }
 .middle {
-    background-image: url("images/backeuro.png");
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    top: 0;
+	background-image: url("images/backeuro.png");
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	top: 0;
 }
 .front {
-    background-image: url("images/faceeuro.png");
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    top: 0;
+	background-image: url("images/faceeuro.png");
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	top: 0;
 }
 @keyframes spin {
-    from {
-    	transform: rotateY(0deg);
-    }
-    to {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
 		transform: rotateY(360deg);
-    }
+	}
 }
 ```
 ## 17、background-origin作用
@@ -224,7 +215,7 @@ vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用�
 
 ```css
 #pic {
-    -webkit-box-reflect: below;
+	-webkit-box-reflect: below;
 }
 ```
 
@@ -232,7 +223,7 @@ vh,vw,vmin,vmax都是基于viewport定义的width来定义单位，它是利用�
 
 ```css
 #pic {
-    -webkit-box-reflect: below 10px;
+	-webkit-box-reflect: below 10px;
 }
 ```
 
