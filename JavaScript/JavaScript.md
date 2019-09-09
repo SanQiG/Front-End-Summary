@@ -223,6 +223,26 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   - 使用call/apply
   - 使用bind
 
+- ## 数组随机化
+
+  ```javascript
+  const shuffle = (arr) => {
+    let currentIndex = arr.length, temporaryValue, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      --currentIndex;
+
+      // swap currentIndex and randomIndex
+      temporaryValue = arr[currentIndex];
+      arr[currentIndex] = arr[randomIndex];
+      arr[randomIndex] = temporaryValue;
+    }
+
+    return arr;
+  };
+  ```
+
 - ## 数组扁平化 + 去重
 
   先来扁平化。
