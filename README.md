@@ -1,10 +1,14 @@
-# Front End Summary
+# Front-End Summary
 
 🍉前端总结
 
 戒骄戒躁，不断努力，请你一定相信自己
 
 ----------------------------------
+
+*All legends fall in the making.*
+
+_[Node](https://github.com/SanQiG/Front-End-Summary/blob/master/Node/NodeJS.md#jump1)_
 
 *此情无计可消除，才下眉头，却上心头。*
 
