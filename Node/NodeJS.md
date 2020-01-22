@@ -763,3 +763,644 @@ http.createServer(function (request, response) {
 ```
 
 以上程序创建了一个HTTP服务器并监听 `8124` 端口，打开浏览器访问该端口 `http://127.0.0.1:8124/` 就能够看到效果。
+
+> 在 Linux 系统下，监听 1024 以下端口需要 root 权限。因此，如果想监听 80 或 443 端口的话，需要使用 `sudo` 命令启动程序。
+
+## API
+
+### HTTP
+
+`http` 模块提供两种使用方式：
+
+- 作为服务端使用时，创建一个HTTP服务器，监听HTTP客户端请求并返回响应。
+- 作为客户端使用时，发起一个HTTP客户端请求，获取服务端响应。
+
+如上例，首先需要使用 `.createServer` 方法创建一个服务器，然后调用 `.listen` 方法监听端口。之后，每当来了一个客户端请求，创建服务器传入的回调函数就被调用一次。可以看出，这是一种事件机制。
+
+HTTP 请求本质上是一个数据流，由请求头和请求体组成。例如以下是一个完整的HTTP请求数据内容。
+
+```
+POST / HTTP/1.1
+User-Agent: curl/7.26.0
+Host: localhost
+Accept: */*
+Content-Length: 11
+Content-Type: application/x-www-form-urlencoded
+
+Hello World
+```
+
+可以看到，空行之上是请求头，之下是请求体。HTTP 请求在发给服务器时，可以认为是按照从头到尾的顺序一个字节一个字节地以数据流方式发送的。**而 `http` 模块创建的 HTTP 服务器在接收到完整的请求头后，就会调用回调函数。**在回调函数中，**除了可以使用 `request` 对象访问请求头数据外，还能把 `request` 对象当作一个只读数据流来访问请求体数据**。以下是一个例子。
+
+```javascript
+http.createServer(function(request, response) {
+  var body = [];
+  
+  console.log(request.method);
+  console.log(request.headers);
+  
+  request.on('data', function (chunk) {
+    body.push(chunk);
+  });
+  
+  request.on('end', function () {
+    body = Buffer.concat(body);
+    console.log(body.toString());
+  });
+}).listen(80);
+```
+
+HTTP 响应本质上也是一个数据流，同样由响应头和响应体组成。例如以下是一个完整的 HTTP 请求数据内容。
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 11
+Date: Tue, 05 Nov 2013 05:31:38 GMT
+Connection: keep-alive
+
+Hello World
+```
+
+在回调函数中，**除了可以使用 `response` 对象来写入响应头数据外，还能把 `response` 对象当作一个只写数据流来写入响应体数据**。例如在以下例子中，服务端原样将客户端请求的请求体数据返回给客户端。
+
+```javascript
+http.createServer(function (request, response) {
+  response.writeHead(200, { 'Content-Type': 'text/plain' });
+  
+  request.on('data', function(chunk) {
+    response.write(chunk);
+  });
+  
+  request.on('end', function() {
+    response.end();
+  });
+}).listen(80);
+```
+
+接下来看看客户端模式下如何工作，为了发起一个客户端HTTP请求，我们需要指定目标服务器的位置并发送请求头和请求体，以下示例演示了具体做法。
+
+```javascript
+var options = {
+  hostname: 'www.example.com',
+  port: 80,
+  path: '/upload',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+};
+
+var request = http.request(options, function (response) {});
+
+request.write('Hello World');
+request.end();
+```
+
+可以看到，`.request` 方法创建了一个客户端，并指定请求目标和请求头数据。之后，就可以把 `request` 对象当作一个只写数据流来写入请求体数据和结束请求。另外，由于 HTTP 请求中 `GET` 请求是最常见的一种，并且不需要请求体，因此 `http` 模块也提供了以下便捷 API。
+
+```javascript
+http.get('http://www.example.com/', function (response) {});
+```
+
+当客户端发送请求并接收到完整的服务端响应头时，就会调用回调函数。在回调函数中，除了可以使用 `response` 对象访问响应头数据，还能把 `response` 对象当作一个只读数据流来访问响应体数据。以下是一个例子。
+
+```javascript
+http.get('http://www.example.com/', function(response) {
+  var body = [];
+  
+  console.log(response.statusCode);
+  console.log(response.headers);
+  
+  response.on('data', function (chunk) {
+    body.push(chunk);
+  });
+  
+  response.on('end', function() {
+    body = Buffer.concat(body);
+    console.log(body.toString());
+  });
+});
+```
+
+### HTTPS
+
+`HTTPS` 模块与 `HTTP` 模块极为类似，区别在于 `HTTPS` 模块需要额外处理 SSL 证书。
+
+在服务端模式下，创建一个 HTTPS 服务器的示例如下。
+
+```javascript
+var options = {
+	key: fs.readFileSync('./ssl/default.key'),
+  cert: fs.readFileSync('./ssl/default.cer')
+};
+
+var server = https.createServer(options, function(request, response) {
+  // ...
+});
+```
+
+可以看到，与创建 HTTP 服务器相比，多了一个 `options` 对象，通过 `key` 和 `cert` 字段指定了 HTTPS 服务器使用的私钥和公钥。
+
+另外，NodeJS 支持 SNI 技术，可以根据 HTTPS 客户端请求使用的域名动态使用不同的证书，因此同一个 HTTPS 服务器可以使用多个域名提供服务。接着上例，可以使用以下方法为 HTTPS 服务器添加多组证书。
+
+> [SNI]([https://zh.wikipedia.org/wiki/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8D%E7%A7%B0%E6%8C%87%E7%A4%BA](https://zh.wikipedia.org/wiki/服务器名称指示))，服务器名称指示，是 TLS 的一个扩展协议，在该协议下，在握手过程开始时客户端告诉它正在连接的服务器要连接的主机名称。这允许服务器在相同的 IP 地址和 TCP 端口号上呈现多个证书，并且因此允许在相同的 IP 地址上提供多个安全网站，而不需要所有这些站点使用相同的证书。
+
+```javascript
+server.addContext('foo.com', {
+  key: fs.readFileSync('./ssl/foo.com.key'),
+  cert: fs.readFileSync('./ssl/foo.com.cer')
+});
+
+server.addContext('bar.com', {
+  key: fs.readFileSync('./ssl/bar.com.key'),
+  cert: fs.readFileSync('./ssl/bar.com.cer')
+});
+```
+
+在客户端模式下，发起一个 HTTPS 客户端请求与 `http` 模块几乎相同，示例如下。
+
+```javascript
+var options = {
+  hostname: 'www.example.com',
+  port: 443,
+  path: '/',
+  method: 'GET'
+};
+
+var request = https.request(options, function(response) {});
+
+request.end();
+```
+
+但如果目标服务器使用的 SSL 证书是自制的，不是从颁发机构购买的，默认情况下 `https` 模块会拒绝连接，提示说有证书安全问题。在 `options` 里加入 `rejectUnauthorized: false` 字段可以禁用对证书有效性的检查，从而允许 `https` 模块请求开发环境下使用自制证书的 HTTPS 服务器。
+
+### URL
+
+处理 HTTP 请求时 `url` 模块使用率超高，因为该模块允许解析 URL、生成 URL，以及拼接 URL。首先我们来看看一个完整的 URL 的各组成部分。
+
+```
+                           href
+ -----------------------------------------------------------------
+                            host              path
+                      --------------- ----------------------------
+ http: // user:pass @ host.com : 8080 /p/a/t/h ?query=string #hash
+ -----    ---------   --------   ---- -------- ------------- -----
+protocol     auth     hostname   port pathname     search     hash
+                                                ------------
+                                                   query
+```
+
+我们可以使用 `.parse` 方法来将一个 URL 字符串转换为 URL 对象，示例如下。
+
+```javascript
+url.parse('http://user:pass@host.com:8080/p/a/t/h?query=string#hash');
+/* =>
+{
+	protocal: 'http',
+	auth: 'user:pass',
+	host: 'host.com:8080',
+	port: '8080',
+	hostname: 'host.com',
+	hash: '#hash',
+	search: '?query=string',
+	query: 'query=string',
+	pathname: '/p/a/t/h',
+	path: '/p/a/t/h?query=string',
+	href: 'http://user:pass@host.com:8080/p/a/t/h?query=string#hash'
+} */
+```
+
+传给 `.parse` 方法的不一定要是一个完整的 URL，例如在 HTTP 服务器回调函数中，`request.url` 不包含协议头和域名，但同样可以用 `.parse` 方法解析。
+
+```javascript
+http.createServer(function (request, response) {
+	var tmp = resquest.url; // => "/foo/bar?a=b"
+  url.parse(tmp);
+  /* =>
+  {
+    protocal: null,
+    auth: null,
+    host: null,
+    port: null,
+    hostname: null,
+    hash: null,
+    search: '?a=b',
+    query: 'a=b',
+    pathname: '/foo/bar',
+    path: '/foo/bar?a=b',
+    href: '/foo/bar?a=b'
+  } */
+}).listen(80);
+```
+
+`.parse` 方法还支持第二个和第三个布尔类型可选参数。第二个参数等于 `true` 时，该方法返回的 URL 对象中，`query` 字段不再是一个字符串，而是一个经过 `querystring` 模块转换后的参数对象。第三个参数等于 `true` 时，该方法可以正确解析不带协议头的 URL，例如 `//www.example.com/foo/bar`。
+
+反过来，`format` 方法允许将一个 URL 对象转换为 URL 字符串，示例如下。
+
+```javascript
+url.format({
+  protocol: 'http:',
+  host: 'www.example.com',
+  pathname: '/p/a/t/h',
+  search: 'query=string'
+});
+/* => 
+	'http://www.example.com/p/a/t/h?query=string'
+*/
+```
+
+另外，`.resolve` 方法可以用于拼接 URL，示例如下。
+
+```javascript
+url.resolve('http://www.example.com/foo/bar', '../baz');
+/* =>
+	http://www.example.com/baz
+*/
+```
+
+### Query String
+
+`querystring` 模块用于实现 URL 参数字符串与参数对象的互相转换，示例如下。
+
+```javascript
+querystring.parse('foo=bar&baz=qux&baz=quux&corge');
+/* =>
+	{ foo: 'bar', baz: ['qux', 'quux'], corge: '' }
+*/
+
+querystring.stringify({ foo: 'bar', baz: ['qux', 'quux'], corge: '' });
+/* =>
+	'foo=bar&baz=qux&baz=quux&corge='
+*/
+```
+
+### Zlib
+
+`zlib` 模块提供了数据压缩和解压的功能。当我们处理 HTTP 请求和响应时，可能需要用到这个模块。
+
+首先我们看一个使用 `zlib` 模块压缩 HTTP 响应体数据的例子。这个例子中，判断了客户端是否支持 gzip，并在支持的情况下使用 `zlib` 模块返回 gzip 之后的响应体数据。
+
+```javascript
+http.createServer(function(request, response) {
+  var i = 1024,
+      data = '';
+  
+  while (i--) {
+    data += '.';
+  }
+  
+  if ((request.headers['accept-encoding'] || '').indexOf('gzip') !== -1) {
+    
+		zlib.gzip(data, function(err, data) {
+			response.writeHead(200, {
+        'Content-Type': 'text/plain',
+        'Content-Encoding': 'gzip'
+      });
+      
+      response.end(data);
+    });
+    
+  } else {
+    
+    response.writeHead(200, {
+      'Content-Type': 'text/plain'
+    });
+    
+    response.end(data);
+    
+  }
+}).listen(80);
+```
+
+接着看一个使用 `zlib` 模块解压 HTTP 响应体数据的例子。这个例子中，判断了服务端响应是否使用 gzip 压缩，并在压缩的情况下使用 `zlib` 模块解压响应体数据。
+
+```javascript
+var options = {
+  hostname: 'www.example.com',
+  port: 80,
+  path: '/',
+  method: 'GET',
+  headers: {
+    'Accept-Encoding': 'gzip, defalte'
+  }
+};
+
+http.request(options, function(response) {
+  var body = [];
+  
+  response.on('data', function(chunk) {
+		body.push(chunk);
+  });
+  
+  response.on('end', function() {
+		body = Buffer.concat(body);
+    
+    if (response.headers['content-encoding'] === 'gzip') {
+      zlib.gunzip(body, function(err, data) {
+        console.log(data.toString());
+      });
+    } else {
+      console.log(data.toString());
+    }
+  });
+}).end();
+```
+
+### Net
+
+`net` 模块可用于创建 Socket 服务器或 Socket 客户端。由于 Socket 在前端领域的使用范围还不是很广，这里先不涉及到 WebSocket 的介绍，仅仅简单演示一下**如何从 Socket 层面来实现 HTTP 请求和响应**。
+
+首先来看一个使用 Socket 搭建一个很不严谨的 HTTP 服务器的例子。这个 HTTP 服务器不管收到什么请求，都固定返回相同的响应。
+
+```javascript
+net.createServer(function(conn) {
+  conn.on('data', function(data) {
+		conn.write([
+      'HTTP/1.1 200 OK',
+      'Content-Type: text/plain',
+      'Content-Length: 11',
+      '',
+      'Hello World'
+    ].join('\n'));
+  });
+}).listen(80);
+```
+
+接着看一个使用 Socket 发起 HTTP 客户端请求的例子。这个例子中，Socket 客户端在建立连接后发送了一个 HTTP GET 请求，并通过 `data` 事件监听函数来获取服务器响应。
+
+```javascript
+var options = {
+	port: 80,
+  host: 'www.example.com'
+};
+
+var client = net.connect(options, function() {
+  client.write([
+    'GET / HTTP/1.1',
+    'User-Agent: curl/7.26.0',
+    'Host: www.google.com',
+    'Accept: */*',
+    '',
+    ''
+  ].join('\n'));
+});
+
+client.on('data', function(data) {
+  console.log(data.toString());
+  client.end();
+});
+```
+
+## 灵机一点
+
+- 问：为什么通过 `headers` 对象访问到的 HTTP 请求头或响应头字段不是驼峰的？
+
+  答：从规范上讲，HTTP 请求头和响应头字段都应该是驼峰的。但现实是残酷的，不是每个 HTTP 服务端或客户端程序都严格遵循规范，所以 NodeJS 在处理别的客户端或服务端收到的头字段时，都统一地转换为了小写字母格式，以便开发者能使用统一的方式来访问头字段，例如 `headers['content-length']`。
+
+- 问：为什么 `http` 模块创建的 HTTP 服务器返回的响应是 `chunked` 传输方式的？
+
+  答：因为默认情况下，使用 `.writeHead` 方法写入响应头后，允许使用 `.write` 方法写入任意长度的响应体数据，并使用 `.end` 方法结束一个响应。由于响应体数据长度不确定，因此 NodeJS 自动在响应头里添加了 `Transfer-Encoding: chunked` 字段，并采用 `chunked` 传输方式。但是当响应体数据长度确定时，可使用 `.writeHead` 方法在响应头里加上 `Content-Length` 字段，这样做之后 NodeJS 就不会自动添加 `Transfer-Encoding` 字段和使用 `chunked` 传输方式。
+
+- 问：为什么使用 `http` 模块发起 HTTP 客户端请求时，有时候会发生 `socket hang up` 错误？
+
+  答：发起客户端 HTTP 请求前需要先创建一个客户端。`http` 模块提供了一个全局客户端 `http.globalAgent`，可以让我们使用 `.request` 或 `.get` 方法时不用手动创建客户端。但是全局客户端默认只允许5个并发 Socket 连接，当某一个时刻 HTTP 客户端请求创建过多，超过这个数字时，就会发生 `socket hang up` 错误。解决方法是通过 `http.globalAgent.maxSockets` 属性把这个数字改大些。另外，`https` 模块遇到这个问题时也一样通过 `https.globalAgent.maxSockets` 属性来处理。
+
+## 小结
+
+本章介绍了使用 NodeJS 操作网络时需要的 API 以及一些坑回避技巧，总结起来有以下几点：
+
+- `http` 和 `https` 模块支持服务端模式和客户端模式两种使用方式
+- `request` 和 `response` 对象除了用于读写头数据外，都可以当作数据流来操作
+- `url.parse` 方法加上 `request.url` 属性是处理 HTTP 请求时的固定搭配
+- 使用 `zlib` 模块可以减少使用 HTTP 协议时的数据传输量
+- 通过 `net` 模块的 Socket 服务器与客户端可对 HTTP 协议做底层操作
+- 小心踩坑
+
+# 5. 进程管理
+
+NodeJS 可以感知和控制自身进程的运行环境和状态，也可以创建子进程并与其协同工作，这使得 NodeJS 可以把多个程序组合在一起共同完成某项工作，并在其中充当胶水和调度器的作用。本章除了介绍与之相关的 NodeJS 内置模块外，还会重点介绍典型的使用场景。
+
+我们已经知道 NodeJS 自带的 `fs` 模块比较基础，把一个目录里的所有文件和子目录都拷贝到另一个目录里要写不少代码。另外我们知道，终端下的 `cp` 命令比较好用，一条 `cp -r source/* target` 命令就能搞定目录拷贝。那我们首先看看如何**使用 NodeJS 调用终端命令来简化目录拷贝**，示例代码如下：
+
+```javascript
+var child_process = require('child_process');
+var util = require('util');
+
+function copy(source, target, callback) {
+  child_process(
+    util.format('cp -r %s/* %s', source, target), callback
+  );
+}
+
+copy('a', 'b', function(err) {
+  // ...
+});
+```
+
+从以上代码可以看到，子进程是异步运行的，通过回调函数返回执行结果。
+
+> **format 函数的基本用法**
+>
+> format 函数根据第一个参数，返回一个格式化字符串，第一个参数是一个可包含零个或多个占位符的字符串。每一个占位符被替换为与其对应的转换后的值，支持的占位符有："**%s(字符串)**"、"**%d(数字)**"、"**%j(JSON)**"、"**%(单独一个百分号则不作为一个参数)**"。
+>
+> 1. 如果占位符没有相对应的参数，占位符将不会被替换。如示例：
+>
+>    ```js
+>    var util = require('util');
+>    var result = util.format('%s:%s', 'foo');
+>    console.log(result); // 'foo:%s'
+>    ```
+>
+> 2. 如果有多个参数占位符，额外的参数将会调用 `util.inspect()` 转换为字符串。这些字符串被连接在一起，并且以空格分隔。如示例：
+>
+>    ```js
+>    var util = require('util');
+>    var result = util.format('%s:%s', 'foo', 'bar', 'baz');
+>    console.log(result); // 'foo:bar baz'
+>    ```
+>
+> 3. 如果第一个参数是一个非格式化字符串，则会把所有的参数转成字符串并以空格隔开拼接在一起，而且返回该字符串。如示例：
+>
+>    ```js
+>    var util = require('util');
+>    var result = util.format(1, 2, 3);
+>    console.log(result); // '1 2 3'
+>    ```
+
+## API
+
+### *Process（进程）*
+
+任何一个进程都有启动进程时使用的命令行参数，有标准输入标准输出，有运行权限，有运行环境和运行状态。在 NodeJS 中，可以通过 `process` 对象感知和控制 NodeJS 自身进程的方方面面。另外需要注意的是，`process` 不是内置模块，而是一个全局对象，因此在任何地方都可以直接使用，无需使用 `require()`。
+
+### *Child Process（子进程）*
+
+使用 `child_process` 模块可以创建和控制子进程。该模块提供的 API 中最核心的是 `.spawn`，其余 API 都是针对特定使用场景对它的进一步封装，算是一种语法糖。
+
+### *Cluster（集群）*
+
+`cluster` 模块是对 `child_process` 模块的进一步封装，专用于解决单进程 NodeJS Web 服务器无法充分利用多核 CPU 的问题。使用该模块可以简化多进程服务器程序的开发，让每个核上运行一个工作进程，并统一通过主进程监听端口和分发请求。
+
+## 应用场景
+
+和进程管理相关的 API 单独介绍起来比较枯燥，因此从一些典型的应用场景出发，分别介绍一些重要 API 的使用方法。
+
+**_如何获取命令行参数_**
+
+​	在 NodeJS 中可以通过 `process.argv` 获取命令行参数。但是比较意外的是，`node` 执行程序路径和主模块文件路径固定占据了 `argv[0]` 和 `argv[1]` 两个位置，而第一个命令行参数从 `argv[2]` 开始。为了让 `argv` 使用起来更加自然，可以按照以下方式处理。
+
+```javascript
+function main(argv) {
+	// ...
+}
+
+main(process.argv.slice(2));
+```
+
+**_如何退出程序_**
+
+​	通常一个程序做完所有事情后就正常退出了，这时程序的退出状态码为 `0`。或者一个程序运行时发生了异常后就挂了，这时程序的退出状态码不等于 `0`。如果我们在代码中捕获了某个异常，但是觉得程序不应该继续运行下去，需要立即退出，并且需要把状态码设置为指定数字，比如 `1`，就可以按照以下方式：
+
+```javascript
+try {
+  // ...
+} catch (err) {
+  // ...
+  process.exit(1);
+}
+```
+
+**_如何控制输入输出_**
+
+​	NodeJS 程序的标准**输入流**（stdin）、一个标准**输出流**（stdout）、一个标准**错误流**（stderr）分别对应 `process.stdin`、`process.stdout` 和 `process.stderr`，第一个是只读数据流，后边两个是只写数据流，对它们的操作按照对数据流的操作方式即可。例如，`console.log` 可以按照以下方式实现。
+
+```javascript
+function log() {
+	process.stdout.write(
+  	util.format.apply(util, arguments) + '\n'
+  );
+}
+```
+
+**_如何降权_**
+
+在 Linux 系统下，我们知道需要使用root权限才能监听1024以下端口。但是一旦完成端口监听后，继续让程序运行在 root 权限下存在安全隐患，因此最好能把权限降下来。以下是这样一个例子。
+
+```javascript
+http.createServer(callback).listen(80, function() {
+  var env = process.env,
+      uid = parseInt(env['SUDO_UID'] || process.getuid(), 10),
+      gid = parseInt(env['SUDO_GID'] || process.getgid(), 10);
+  
+  process.setgid(gid);
+  process.setuid(uid);
+});
+```
+
+上例中有几点需要注意：
+
+1. 如果是通过 `sudo` 获取root权限的，运行程序的用户的 UID 和 GID 保存在环境变量 `SUDO_UID` 和 `SUDO_GID` 里边。如果是通过 `chmod +s` 方式获取root权限的，运行程序的用户的 UID 和 GID 可直接通过 `process.getuid` 和 `process.getgid` 方法获取。
+   
+2. `process.getuid` 和 `process.getgid` 方法只接受 `number` 类型的参数。
+
+3. **降权时必须先降 GID 再降 UID**，否则顺序反过来的话就没权限更改程序的 GID 了。
+
+**_如何创建子进程_**
+
+​	以下是一个创建 NodeJS 子进程的例子。
+
+```javascript
+var child = child_process.spawn('node', ['xxx.js']);
+
+child.stdout.on('data', function (data) {
+  console.log('stdout: ' + data);
+});
+
+child.stderr.on('data', function (data) {
+  console.log('stderr: ' + data);
+});
+
+child.on('close', function (code) {
+  console.log('child process exited with code ' + code);
+});
+```
+
+上例中使用了 `child_process.spawn(command[, args][, options])` 方法，该方法支持三个参数。第一个参数是要运行的命令。第二个参数是字符串参数的列表，数组中的每个成员都按顺序对应一个命令行参数。第三个参数可选，用于配置子进程的执行环境与行为。
+
+`child_process.spawn()` 方法使用给定的 `command` 衍生一个新进程，并带上 `args` 中的命令行参数。如果省略 `args`，则其默认为一个空数组。
+
+另外，上例中虽然通过子进程对象的 `.stdout` 和 `.stderr` 访问子进程的输出，但通过 `options.stdio` 字段的不同配置，可以将子进程的输入输出重定向到任何数据流上，或者让子进程共享父进程的标准输入输出流，或者直接忽略子进程的输入输出。
+
+**_进程间如何通讯_**
+
+在 Linux 系统下，进程之间可以通过信号互相通信。以下是一个例子。
+
+```javascript
+/* parent.js */
+var child = child_process.spawn('node', ['child.js']);
+
+child.kill('SIGTERM');
+
+/* child.js */
+process.on('SIGTERM', function () {
+  cleanUp();
+  process.exit(0);
+});
+```
+
+在上例中，父进程通过 `.kill` 方法向子进程发送 `SIGTERM` 信号，子进程监听 `process` 对象的  `SIGTERM` 事件响应信号。**不要被 `.kill` 方法的名称迷惑了，该方法本质上是用来给进程发送信号的，进程收到信号具体做什么，完全取决于信号的种类和进程自身的代码。**
+
+另外，如果父子进程都是 NodeJS 进程，就可以通过 IPC（进程间通讯）双向传递数据。以下是一个例子。
+
+```javascript
+/* parent.js */
+var child = child_process.spawn('node', ['child.js'], {
+  stdio: [0, 1, 2, 'ipc']
+});
+
+child.on('message', function (msg) {
+  console.log(msg);
+});
+
+child.send({ hello: 'hello' });
+
+/* child.js */
+process.on('message', function (msg) {
+  msg.hello = msg.hello.toUpperCase();
+  process.send(msg);
+});
+```
+
+可以看到，父进程在创建子进程时，在 `options.stdio` 字段中通过 `ipc` 开启了一条 IPC 通道，之后就可以监听子进程对象的 `message` 事件接收来自子进程的消息，并通过 `.send` 方法给子进程发送消息。在子进程这边，可以在 `process` 对象上监听 `message` 事件接收来自父进程的消息，并通过 `.send` 方法向父进程发送消息。**数据在传递过程中，会先在发送端使用 `JSON.stringify` 方法序列化，再在接收端使用 `JSON.parse` 方法反序列化。**
+
+**_如何守护子进程_**
+
+守护进程一般用于监控工作进程的运行状态，在工作进程不正常退出时重启工作进程，保障工作进程不间断运行。以下是一种实现方式。
+
+```javascript
+function spawn(mainModule) {
+  var worker = child_process.spawn('node', [mainModule]);
+  
+  worker.on('exit', function (code) {
+    if (code !== 0) spawn(mainModule);
+  });
+}
+
+spawn('worker.js');
+```
+
+可以看到，工作进程非正常退出时，守护进程立即重启工作进程。
+
+## 小结
+
+本章介绍了使用 NodeJS 管理进程时需要的 API 以及主要的应用场景，总结起来有以下几点：
+
+- 使用 `process` 对象管理自身
+
+  
+
+- 使用 `child_process` 模块创建和管理子进程
+
+# 异步编程
+
