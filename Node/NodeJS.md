@@ -97,14 +97,14 @@ node main.js
    与 PATH 环境变量类似，NodeJS 允许通过 `NODE_PATH` 环境变量来指定额外的模块搜索路径。`NODE_PATH` 环境变量中包含一到多个目录路径，路径之间在 Linux 下使用 `:` 分隔，在 Windows 下使用 `;` 分隔。例如定义了以下 `NODE_PATH` 环境变量：
 
    ```
-NODE_PATH=/home/user/lib:/home/lib
+	NODE_PATH=/home/user/lib:/home/lib
    ```
 
 ​	当使用 `require('foo/bar')` 的方式加载模块时，则 NodeJS 依次尝试以下路径
 
    ```
-/home/user/lib/foo/bar
-/home/lib/foo/bar
+	/home/user/lib/foo/bar
+	/home/lib/foo/bar
    ```
 
 ## 包（package）
