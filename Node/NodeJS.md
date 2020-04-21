@@ -6,11 +6,11 @@
 
 在编写每个模块时，都有 `require`、`exports`、`module` 三个预先定义好的变量可供使用。
 
-**_`require`_**
+**`require`**
 
 `require` 函数用于在当前模块中加载和使用别的模块，传入一个模块名，返回一个模块导出对象。模块名可使用相对路径（以 `./` 开头），或者是绝对路径（以 `/` 或 `C:` 之类的盘符开头）。另外，模块名中的 `.js` 扩展名可以省略。
 
-**当 Node 遇到 `require(X)` 时，按下面的顺序处理。**
+当 Node 遇到 `require(X)` 时，按下面的顺序处理：（优先从缓存中加载，然后遵循以下加载顺序）
 
 1. 如果 X 是内置模块（比如 `require('http')` )
    a. 返回该模块
@@ -33,10 +33,11 @@
    - X/index.node
 
 3. 如果 X 不带路径
-   a. 根据 X 所在的父模块，确定 X 可能的安装目录
-
-   b. 依次在每个目录中，将 X 当成文件名或目录名加载
-
+   
+a. 根据 X 所在的父模块，确定 X 可能的安装目录
+   
+b. 依次在每个目录中，将 X 当成文件名或目录名加载
+   
 4. 抛出 “not found”
 
 **_`exports`_**
@@ -52,6 +53,8 @@
 1. `module.exports` 初始值为一个空对象
 2. `exports` 是指向的 `module.exports` 的引用
 3. `require()` 返回的是  `module.exports` 而不是 `exports`
+
+在使用时导出多个对象：`exports.xxx=xxx`，导出单个对象：`module.exports=xxx`。
 
 ### 模块初始化
 
@@ -77,8 +80,6 @@ node main.js
 
    如果传递给 `require` 函数的是 NodeJS 内置模块名称，不做路径解析，直接返回内部模块的导出对象，例如 `require('fs')`。
    
-   
-   
 2. **node_modules 目录**
 
 
@@ -97,14 +98,14 @@ node main.js
    与 PATH 环境变量类似，NodeJS 允许通过 `NODE_PATH` 环境变量来指定额外的模块搜索路径。`NODE_PATH` 环境变量中包含一到多个目录路径，路径之间在 Linux 下使用 `:` 分隔，在 Windows 下使用 `;` 分隔。例如定义了以下 `NODE_PATH` 环境变量：
 
    ```
-	NODE_PATH=/home/user/lib:/home/lib
+NODE_PATH=/home/user/lib:/home/lib
    ```
 
 ​	当使用 `require('foo/bar')` 的方式加载模块时，则 NodeJS 依次尝试以下路径
 
    ```
-	/home/user/lib/foo/bar
-	/home/lib/foo/bar
+/home/user/lib/foo/bar
+/home/lib/foo/bar
    ```
 
 ## 包（package）
@@ -1228,15 +1229,15 @@ copy('a', 'b', function(err) {
 
 ## API
 
-### *Process（进程）*
+### Process（进程）
 
 任何一个进程都有启动进程时使用的命令行参数，有标准输入标准输出，有运行权限，有运行环境和运行状态。在 NodeJS 中，可以通过 `process` 对象感知和控制 NodeJS 自身进程的方方面面。另外需要注意的是，`process` 不是内置模块，而是一个全局对象，因此在任何地方都可以直接使用，无需使用 `require()`。
 
-### *Child Process（子进程）*
+### Child Process（子进程）
 
 使用 `child_process` 模块可以创建和控制子进程。该模块提供的 API 中最核心的是 `.spawn`，其余 API 都是针对特定使用场景对它的进一步封装，算是一种语法糖。
 
-### *Cluster（集群）*
+### Cluster（集群）
 
 `cluster` 模块是对 `child_process` 模块的进一步封装，专用于解决单进程 NodeJS Web 服务器无法充分利用多核 CPU 的问题。使用该模块可以简化多进程服务器程序的开发，让每个核上运行一个工作进程，并统一通过主进程监听端口和分发请求。
 
@@ -1804,15 +1805,9 @@ http.createServer(function (request, response) {
 
 - 不掌握异步编程就不算学会 NodeJS
 
-  
-
 - 异步编程依托于回调来实现，而使用回调函数不一定就是异步编程
 
-  
-
 - 异步编程下的函数间数据传递、数组遍历和异常处理与同步编程有很大差别
-
-  
 
 - 使用 `domain` 模块简化异步代码的异常处理，并小心陷阱
 
