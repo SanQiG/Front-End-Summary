@@ -13,11 +13,15 @@
 当 Node 遇到 `require(X)` 时，按下面的顺序处理：（优先从缓存中加载，然后遵循以下加载顺序）
 
 1. 如果 X 是内置模块（比如 `require('http')` )
+
    a. 返回该模块
+   
    b. 不再继续执行
 
 2. 如果 X 以 "./" 或者 "/" 或者 "../" 开头
+
    a. 根据 X 所在的父模块，确定 X 的绝对路径
+   
    b. 将 X 当成文件，依次查找下面文件，只要其中有一个存在，就返回该文件，不再继续执行
 
    - X
@@ -34,9 +38,9 @@
 
 3. 如果 X 不带路径
    
-a. 根据 X 所在的父模块，确定 X 可能的安装目录
+   a. 根据 X 所在的父模块，确定 X 可能的安装目录
    
-b. 依次在每个目录中，将 X 当成文件名或目录名加载
+   b. 依次在每个目录中，将 X 当成文件名或目录名加载
    
 4. 抛出 “not found”
 
@@ -98,14 +102,14 @@ node main.js
    与 PATH 环境变量类似，NodeJS 允许通过 `NODE_PATH` 环境变量来指定额外的模块搜索路径。`NODE_PATH` 环境变量中包含一到多个目录路径，路径之间在 Linux 下使用 `:` 分隔，在 Windows 下使用 `;` 分隔。例如定义了以下 `NODE_PATH` 环境变量：
 
    ```
-NODE_PATH=/home/user/lib:/home/lib
+   NODE_PATH=/home/user/lib:/home/lib
    ```
 
-​	当使用 `require('foo/bar')` 的方式加载模块时，则 NodeJS 依次尝试以下路径
+当使用 `require('foo/bar')` 的方式加载模块时，则 NodeJS 依次尝试以下路径
 
    ```
-/home/user/lib/foo/bar
-/home/lib/foo/bar
+   /home/user/lib/foo/bar
+   /home/lib/foo/bar
    ```
 
 ## 包（package）
