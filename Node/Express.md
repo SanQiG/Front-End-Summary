@@ -109,6 +109,8 @@ var app = express()
 
 // 只要加入这个配置，在 req 请求对象上就会多出来一个 body 属性
 // 也就是说可以直接通过 req.body 来获取表单 POST 请求体数据了
+// 除此之外，中间件配置一定要在挂在路由之前进行
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -124,5 +126,37 @@ app.use(function (req, res) {
   res.write('you posted:\n')
   res.end(JSON.stringify(req.body, null, 2))
 })
+```
+
+# 5. Express 路由设计
+
+将 Express 中的路由单独集成到 `router.js` 文件中，并在 `app.js` 文件中将路由容器挂载到服务中。
+
+**router.js**
+
+`router.js` 路由模块的职责是：处理路由、根据不同的请求方法以及请求路径设置具体的处理函数。
+
+```js
+const express = require('express')
+const router = express.Router()
+
+router.get('/xxx', callback)
+router.post('/xxx', callback)
+
+// ...
+
+module.exports = router
+```
+
+**app.js**
+
+```js
+const router = require('./router')
+const express = require('express')
+
+const app = express()
+
+// 把路由容器挂载到 app 服务中
+app.use(router)
 ```
 
