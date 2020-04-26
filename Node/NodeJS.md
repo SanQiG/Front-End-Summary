@@ -37,7 +37,7 @@
    - X/index.node
 
 3. 如果 X 不带路径
-   
+  
    a. 根据 X 所在的父模块，确定 X 可能的安装目录
    
    b. 依次在每个目录中，将 X 当成文件名或目录名加载
@@ -153,6 +153,16 @@ JS 模块的基本单位是单个 JS 文件，但复杂些的模块往往由多�
    ```
 
    如此一来，就同样可以使用 `require('/home/user/lib/cat')` 的方式加载模块。NodeJS 会根据包目录下的 `package.json` 找到入口模块所在位置。
+   
+3. `package.json` 和 `package-lock.json`
+
+   NPM5 以前是不会有 `package-lock.json` 文件的，NPM5 以后安装包的时候，会自动创建或者更新 `package-lock.json` 这个文件。
+
+   - NPM5 以后的版本安装包不需要加 `--save` 参数就会自动保存依赖信息；
+   - 在安装包时，会自动创建或者更新 `package-lock.json` 这个文件；
+   - `package-lock.json` 这个文件会保存 node_modules 中所有包的信息（版本、下载地址等）。这样在重新执行 `npm install` 操作时的速度可以得到显著提升；
+   - `lock` 是用来锁定版本的，如果在 `package.json` 文件中发现项目依赖了 ^1.1.1 版本，这里的向^指的是向后（新）兼容依赖，如果包版本超过 1.1.1，并且是在大版本上相同，就允许下载最新的包。因此重新执行 `npm install` 其实会下载该大版本下的最新版本，而不是 1.1.1。所以 `package-lock.json` 的另一个作用是锁定版本号，防止自动升级新版本。
+   - 当 `package.json` 和 `package-lock.json` 都不存在时，执行 `npm install XXX` 时，node 会重新生成 `package-lock.json` 文件，然后把 node_modules 中的模块信息全部记入 `package-lock.json` 文件。**但不会生成 `package.json` 文件。但是你可以通过 `npm install -y` 来生成 `package.json` 文件。**
 
 ## NPM
 
