@@ -66,13 +66,13 @@ mongo
 
 ```json
 {
-  "db": {
-    "collection": [
-      {"name": "Jack", age: 20},
-			{"name": "Pony", age: 22},
-			{"name": "Sasha", age: 23}
-    ]
-  }
+	"db": {
+		"collection": [
+			{"name": "Jack", "age": 20},
+			{"name": "Pony", "age": 22},
+			{"name": "Sasha", "age": 23}
+		]
+	}
 }
 ```
 
@@ -86,6 +86,7 @@ mongo
 |          `show collections`          |             查看已有集合             |
 | `db.users.insert({"name": "SANKI"})` |           向集合中插入文档           |
 |          `db.users.find()`           |           查询集合中的文档           |
+
 MongoDB 中默认的数据库为 test，如果没有创建新的数据库，集合将存放在 test 数据库中。
 
 **注意：在 MongoDB 中，集合只有在内容插入后才会创建！也就说，创建集合（数据表）后要再插入一个文档（记录），集合才会真正创建。**
