@@ -1,3 +1,21 @@
+- ## 显式原型与隐式原型
+
+  先贴篇[文章](https://zhuanlan.zhihu.com/p/23253365)。
+
+  **显式原型**：每一个函数在创建之后都会拥有一个名为 prototype 的属性，这个属性指向函数的原型对象。
+  
+  > 通过 Function.prototype.bind 方法构造出来的函数是个例外，它没有 prototype 属性
+  
+  **隐式原型**：JavaScript 中任意对象都有一个内置属性 `[[prototype]]`，在 ES5 之前没有标准的方法访问这个内置属性，但是大多数浏览器都支持通过 `__proto__` 来访问。ES5 中有了对于这个内置属性标准的 Get 方法 `Object.getPrototypeOf()`。
+
+  > Object.prototype 这个对象是个例外，它的 `__proto__` 值为 null
+
+	**二者的关系**：
+  
+  - 隐式原型指向创建这个对象的构造函数（constructor）的显式原型；
+  - 构造函数的 `__proto__` 指向构造函数的原型对象，对于函数来说就是 Function.prototype；
+  - 构造函数的原型对象也有 `__proto__`，同理它指向构造原型对象的构造函数（即 Function）的原型对象（即 Object.prototype)。
+  
 - ## `instanceof` 内部机制
 
   假设现在有 `L instanceof R`
@@ -29,9 +47,9 @@
   console.log(Function instanceof Function);// true
   console.log(Number   instanceof Number);  // false
   console.log(String   instanceof String);  // false
-
+  
   console.log(Function instanceof Object);  // true
-
+  
   console.log(Foo      instanceof Function);// true
   console.log(Foo      instanceof Foo);     // false
   ```
