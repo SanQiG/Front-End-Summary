@@ -174,9 +174,31 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   3. let没有变量提升和暂时性死区
   4. let变量不能重复声明
 
-- ## `Promise`
+- ## Promise
 
   具体看[这里](https://github.com/SanQiG/Front-End-Interview-Summarize/blob/master/JavaScript/Promise.md)
+
+- ## async/await
+
+  ### async 函数
+
+  函数的返回值为 Promise 对象
+
+  Promise 对象的结果由 async 函数执行的返回值决定
+
+  ### await 函数
+
+  await 右侧的表达式一般为 Promise 对象，但也可以是其它的值
+
+  如果表达式是 Promise 对象，await 返回的是 Promise 成功的值
+
+  如果表达式是其它值，直接将此值作为 await 的返回值
+
+  ### ⚠️注意
+
+  await 必须写在 async 函数中，但 async 函数中可以没有 await
+
+  如果 await 的 Promise 失败了，就会抛出异常，需要通过 try...catch 来捕获处理
 
 - ## [TODO] 事件循环机制
 
@@ -190,15 +212,6 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   - 如果调用函数不符合上述规则，那么`this`的值指向全局对象。非严格模式下，`this`指向`window`对象，但在严格模式下，`this`的值是`undefined`。
   - 如果符合上述多个规则，则较高的规则（从上到下依次减小）将决定`this`的值
   - 如果函数是箭头函数，将忽略上面的所有规则，`this`被设置为它被创建时的上下文
-
-- ## `for...in` 和 `for...of` 有什么区别？
-
-1. 推荐在循环对象属性的时候使用 `for...in`，在遍历数组的时候使用 `for...of`
-2. `for...in` 循环出的是 key，`for...of` 循环出的是 value
-3. 注意，`for...of` 是ES6新引入的特性。修复了ES5引入的 `for...in` 的不足
-4. `for...of` 不能循环普通的对象，需要通过和 `Object.keys()` 搭配使用
-
-之所以说`for...of`修复了`for...in`的不足是因为`for...in`除了遍历除了数组元素之外，还会遍历自定义属性
 
 - ## 类数组转数组
 
@@ -223,11 +236,11 @@ console.log(obj.__proto__.__proto__ === F.prototype);
     push.call(this, val);
   })
   ```
-  
+
 - ## 哪些操作会导致内存泄漏
 
   JS内存泄漏指对象在不需要使用它时仍然存在，导致占用的内存不能够被使用或回收。
-  
+
   - 未使用var声明的全局变量
   - 闭包函数
   - 循环引用（两个对象相互引用）
@@ -246,17 +259,17 @@ console.log(obj.__proto__.__proto__ === F.prototype);
   ```javascript
   const shuffle = (arr) => {
     let currentIndex = arr.length, temporaryValue, randomIndex;
-
+  
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       --currentIndex;
-
+  
       // swap currentIndex and randomIndex
       temporaryValue = arr[currentIndex];
       arr[currentIndex] = arr[randomIndex];
       arr[randomIndex] = temporaryValue;
     }
-
+  
     return arr;
   };
   ```

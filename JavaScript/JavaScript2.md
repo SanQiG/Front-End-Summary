@@ -1,6 +1,18 @@
+## Object.keys 的排序逻辑
+
+**具体[猛戳这里](https://juejin.im/post/5b593e065188251aff2169f7)**
+
+`Object.keys` 在内部会根据属性名 `key` 的类型进行不同的排序逻辑。分三种情况：
+
+1. 如果属性名的类型是 `Number`，那么 `Object.keys` 返回值是按照 `key` 从小到大排序
+2. 如果属性名的类型是 `String`，那么 `Object.keys` 返回值是按照属性被创建的时间升序排序
+3. 如果属性名的类型是 `Symbol`，那么逻辑同 `String` 相同
+
+**该排序规则同样适用于：Object.values、Object.entries、for...in、Object.getOwnPropertyNames、Reflect.ownKeys**
+
 ## 箭头函数和普通函数的区别
 
-  > 具体[猛戳这里](<https://www.jianshu.com/p/eca50cc933b7>)
+**具体[猛戳这里](<https://www.jianshu.com/p/eca50cc933b7>)**
 
   1. 不绑定this，箭头函数会捕获其所在上下文的this的值
   2. 使用 call 或 apply 对this没有影响
@@ -8,8 +20,17 @@
   4. 不能使用 new 操作符
   5. 没有原型属性
   6. 不能简单返回对象字面量
-  7. 箭头函数在参数和箭头之间不能换行
-     
+    7. 箭头函数在参数和箭头之间不能换行
+## for...in 和 for...of 的区别
+
+1. 推荐在循环对象属性的时候使用 for...in，在遍历数组的时候使用 for...of
+2. for...in 循环出的是 key，for...of 循环出的是 value
+3. 注意，for...of 是ES6新引入的特性。修复了ES5引入的 for...in 的不足
+4. for...of 不能循环普通的对象，需要通过和 Object.keys() 搭配使用
+5. for...in 不能遍历 Set 和 Map，而 for...of 可以
+
+之所以说 for...of 修复了 for...in 的不足是因为 for...in 除了遍历除了数组元素之外，还会遍历自定义属性
+
 ## Set 和 WeakSet 的区别
 
 - Set类似于数组，但是**成员的值都是唯一的**，没有重复。Set本身是一个构造函数，用来生成Set数据结构。
@@ -28,15 +49,118 @@
 
 - WeakMap的键名是对象的**弱引用**，键名所指向的对象不计入垃圾回收机制。典型的应用是，一个对应的DOM元素的WeakMap结构，当某个DOM元素被清除，其所对应的WeakMap记录就会自动被移除。基本上，WeakMap的专用场合就是，它的键所对应的对象，可能会在将来消失。**WeakMap结构有助于防止内存泄漏**。
 
-## Map 和 Objects 的区别
+## Map 和 Object 的区别
 
 - 一个 Object 的键只能是字符串或者 Symbols，但一个 Map 的键可以是任意值。
-
 - Map 中的键值是有序的（FIFO原则），而添加到对象中的键则不是。
-
 - Map 的键值对个数可以从 size 属性获取，而 Object 的键值对个数只能手动计算。
-
 - Object 都有自己的原型，原型链上的键名有可能和你自己在对象上的设置的键名产生冲突。
+
+## Map 与 Object 之间的相互转换
+
+###  Map => Object
+
+```js
+const map = new Map([
+  [5, '5'],
+  ['a', 'a'],
+  [1, '1'],
+  ['c', 'c'],
+  [3, '3'],
+  ['b', 'b']
+])
+
+Object.fromEntries(map)
+```
+
+### Object => Map
+
+```js
+const obj = {
+  5: '5',
+  a: 'a',
+  1: '1',
+  c: 'c',
+  3: '3',
+  b: 'b'
+}
+
+new Map(Object.entries(obj))
+```
+
+## Map 的迭代
+
+### for...of
+
+```js
+var map = new Map()
+map.set(0, 'zero')
+map.set(1, 'one')
+
+for (var [key, value] of map) {
+  console.log(key + ' = ' + value)
+}
+
+// 这个 entries 方法返回一个新的 Iterator 对象，它按插入顺序包含了 Map 对象中每个元素的 [key, value] 数组
+for (var [key, value] of map.entries()) {
+  console.log(key + ' = ' + value)
+}
+
+// 这个 keys 返回一个新的 Iterator 对象，它按插入顺序包含了 Map 对象中每个元素的键
+for (var key of map.keys()) {
+  console.log(key)
+}
+
+// 这个 values 返回一个新的 Iterator 对象，它按插入顺序包含了 Map 对象中每个元素的值
+for (var value of map.values()) {
+	console.log(value)
+}
+```
+
+### forEach()
+
+```javascript
+var map = new Map()
+map.set(0, 'zero')
+map.set(1, 'one')
+
+map.forEach(function(item, index) {
+	console.log(key + ' = ' + value)
+}, map)
+```
+
+## Map 对象的操作
+
+### Map 与 Array 的转换
+
+```javascript
+var kvArray = [['key1', 'value1'], ['key2', 'value2'], ['key3', 'value3']]
+
+// Map 构造函数可以将一个二维键值对数组转换成一个 Map 对象
+var map = new Map(kvArray)
+
+// 使用 Array.from 函数可以将一个 Map 对象转换成一个二维键值对数组
+var outArray = Array.from(map)
+```
+
+### Map 的克隆
+
+```js
+var map1 = new Map([['key1', 'value1'], ['key2', 'value2']])
+var map2 = new Map(map1)
+
+console.log(map1 === map2)
+// 打印 false。Map 对象构造函数生成实例，迭代出新的对象。
+```
+
+### Map 的合并
+
+```js
+var first = new Map([[1, 'one'], [2, 'two'], [3, 'three']])
+var second = new Map([[1, 'uno'], [2, 'dos']])
+
+var merged = new Map([...first, ...second])
+```
 
 ## undefined 与 null 的区别
 
@@ -206,13 +330,13 @@ xhr.withCredentials = true;  // 支持跨域发送cookies
 xhr.send();
 ```
 
-## Proxy 比 `Object.defineProperty()` 好在哪儿？
+## Proxy 比 Object.defineProperty() 好在哪儿？
 
 Proxy可以监听对象身上发生了什么，并在这些事情发生后执行一些相应的操作。一下子让我们对一个对象有了很强的追踪能力，同时在数据绑定方面也很有用处。
 
 1. Proxy可以直接监听对象而非属性
 2. Proxy可以直接监听数组的变化
-3. Proxy有多达13种拦截方法，apply、ownKeys、deleteProperty、has等等是`Object.defineProperty()`不具备的
-4. Proxy返回一个新对象，我们可以只操作新的对象达到目的，而`Object.defineProperty()`只能遍历对象属性直接修改
+3. Proxy有多达13种拦截方法，apply、ownKeys、deleteProperty、has等等是Object.defineProperty()不具备的
+4. Proxy返回一个新对象，我们可以只操作新的对象达到目的，而Object.defineProperty()只能遍历对象属性直接修改
 5. Proxy作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利
 6. Proxy的缺点就是兼容性问题
