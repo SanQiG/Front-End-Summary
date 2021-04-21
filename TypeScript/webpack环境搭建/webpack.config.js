@@ -1,6 +1,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
 module.exports = {
   entry: './src/index.ts',
@@ -53,7 +54,8 @@ module.exports = {
     new HTMLWebpackPlugin({
       // title: 'typescript-demo'
       template: './src/index.html'
-    })
+    }),
+    new DashboardPlugin()
   ],
   resolve: {
     extensions: ['.ts', '.js']
