@@ -210,3 +210,192 @@ let l: myType;
 
 ## 面向对象
 
+### 抽象类、抽象方法
+
+抽象类使用 absctract 开头。抽象类和其它类的区别不大，只是不能用来直接创建实例，是专门用来被继承的类。
+
+抽象方法使用 absctract 开头，并且没有方法体。抽象方法只能定义在抽象类中，并且子类必须对抽象方法进行重写。
+
+```typescript
+abstract class Animal {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  abstract say(): void;
+}
+
+class Dog extends Animal {
+  gender: number;
+
+  constructor(name: string, age:number, gender: number) {
+    super(name, age); // 子类的构造函数必须通过 super 调用父类的构造函数
+    this.gender = gender;
+  }
+
+  say() {
+    console.log(`${this.name} - ${this.age} 汪汪汪`);
+  }
+}
+```
+
+### 接口
+
+接口用来定义一个类的结构，定义一个类中应该包含哪些属性和方法。同时接口也可以当成类型声明去使用。
+
+```typescript
+interface myInterface {
+  name: string;
+  age: number;
+}
+
+interface myInterface {
+  gender: string;
+}
+
+const obj: myInterface = {
+  name: '123',
+  age: 123,
+  gender: '123'
+}
+```
+
+除此之外，接口可以在定义类的时候去限制类的结构，接口中所有的属性都不能有实际的值。接口只定义对象的结构，而不考虑实际值，在接口中所有的方法都是抽象方法。
+
+```typescript
+interface myinter {
+  name: string;
+
+  say(): void;
+}
+
+class myClass implements myinter {
+  name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  say(): void {
+    console.log(this.name);
+  }
+}
+```
+
+### 属性封装
+
+TS 可以在属性前添加属性的修饰符：
+- `public` 修饰的属性可以在任意位置访问（修改）默认值
+- `private` 私有属性，只能在类的内部进行访问（修改）
+  - 通过在类中添加方法使得私有属性可以被外部访问，他们被称为属性的存取器
+  - getter 方法用来读取属性
+  - setter 方法用来设置属性
+- `protected` 受保护的属性，只能在当前类和当前类的子类中访问（修改）
+
+```typescript
+class Person {
+  private _name: string;
+  private _age: number;
+
+  constructor(name: string, age: number) {
+    this._name = name;
+    this._age = age;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(val) {
+    this._name = val;
+  }
+
+  get age() {
+    return this._age;
+  }
+
+  set age(val) {
+    val > 0 && (this._age = val);
+  }
+}
+
+const p1 = new Person('sss', 22);
+console.log(p1.name);
+p1.name = 'qqq';
+console.log(p1.name);
+```
+
+```typescript
+class A {
+  protected num: number;
+
+  constructor(num: number) {
+    this.num = num;
+  }
+}
+
+class B extends A {
+  test() {
+    console.log(this.num);
+  }
+}
+
+const b = new B(1);
+console.log(b.num); // 报错
+```
+
+### tips
+
+```typescript
+// 简单声明一个类
+class C {
+  constructor(public name: string, private age: number) {
+  }
+}
+
+const c = new C('xxx', 111);
+```
+
+### 泛型
+
+在定义函数或是类时，如果遇到类型不明确就可以使用泛型。
+
+```typescript
+function fn<T>(a: T): T {
+  return a;
+}
+
+console.log(fn(123)); // 不指定泛型，ts 自动判断
+console.log(fn<string>('hello')); // 指定泛型
+
+const fn2 = <T, K>(a: T, b: K): T => {
+  console.log(b);
+  return a;
+}
+
+console.log(fn2('hello', 123));
+console.log(fn2<string, number>('hello', 123));
+
+interface Inter {
+  length: number;
+}
+
+function fn3<T extends Inter>(a: T): number {
+  return a.length;
+}
+
+console.log(fn3('hello'));
+console.log(fn3({ length: 37 }));
+
+class MyClass<T> {
+  constructor(public name: T) {
+  }
+}
+
+const mc = new MyClass('sanki');
+console.log('mc', mc.name);
+```

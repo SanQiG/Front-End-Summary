@@ -1,13 +1,11 @@
-class Animal {
+abstract class Animal {
   name: string;
 
   constructor(name: string, age?: number) {
     this.name = name;
   }
 
-  say() {
-    console.log('hi');
-  }
+  abstract say(): void;
 }
 
 class Dog extends Animal {
@@ -19,7 +17,7 @@ class Dog extends Animal {
   }
 
   say() {
-    super.say();
+    // super.say();
     console.log(`${this.name} - ${this.age} 汪汪汪`);
   }
 
@@ -36,6 +34,7 @@ class Cat extends Animal {
 
 const d1 = new Dog('?', 11);
 const d2 = new Cat('!');
+// const a1 = new Animal('.');
 
 d1.say();
 d1.run();
