@@ -6,6 +6,10 @@
 
 ----------------------------------
 
+*君问归期未有期，巴山夜雨涨秋池*
+
+[TypeScript](https://github.com/SanQiG/Front-End-Summary/blob/master/TypeScript/Typescript.md)
+
 *All legends fall in the making.*
 
 [Node](https://github.com/SanQiG/Front-End-Summary/blob/master/Node/NodeJS.md#jump1)
@@ -42,4 +46,3 @@
 
 [设计模式汇总](https://github.com/SanQiG/Front-End-Summary/blob/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%B1%87%E6%80%BB.md)
 
-[TypeScript](https://github.com/SanQiG/Front-End-Summary/blob/master/TypeScript/Typescript.md)
