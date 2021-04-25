@@ -5,7 +5,7 @@ const escodegen = require('escodegen');
 
 const program = fs.readFileSync('./src/demo.js').toString();
 const AST = esprima.parseScript(program);
-fs.writeFileSync('./ast-before.json', JSON.stringify(AST));
+fs.writeFileSync('./src/ast-before.json', JSON.stringify(AST, null, 2));
 
 function walkIn(ast) {
   estraverse.traverse(ast, {
@@ -32,5 +32,13 @@ function setParseInt(node) {
 }
 
 walkIn(AST);
-fs.writeFileSync('./ast-after.json', JSON.stringify(AST, null, 2));
-console.log(escodegen.generate(AST));
+fs.writeFileSync('./src/ast-after.json', JSON.stringify(AST, null, 2));
+fs.writeFileSync('./src/demo-after.js', escodegen.generate(AST, {
+  format: {
+    indent: {
+      style: '  ',
+      base: 0,
+    },
+    newline: '\n'
+  }
+}));

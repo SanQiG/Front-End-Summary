@@ -20,7 +20,7 @@
             "type": "IfStatement",
             "test": {
               "type": "BinaryExpression",
-              "operator": "===",
+              "operator": "==",
               "left": {
                 "type": "MemberExpression",
                 "computed": false,
@@ -75,7 +75,7 @@
             "type": "IfStatement",
             "test": {
               "type": "BinaryExpression",
-              "operator": "===",
+              "operator": "==",
               "left": {
                 "type": "MemberExpression",
                 "computed": false,
@@ -162,10 +162,6 @@
                   {
                     "type": "Identifier",
                     "name": "age"
-                  },
-                  {
-                    "type": "Literal",
-                    "value": 10
                   }
                 ]
               },
@@ -212,6 +208,40 @@
       "generator": false,
       "expression": false,
       "async": false
+    },
+    {
+      "type": "IfStatement",
+      "test": {
+        "type": "Literal",
+        "value": true,
+        "raw": "true"
+      },
+      "consequent": {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "computed": false,
+            "object": {
+              "type": "Identifier",
+              "name": "console"
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "log"
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 666,
+              "raw": "666"
+            }
+          ]
+        }
+      },
+      "alternate": null
     }
   ],
   "sourceType": "script"
