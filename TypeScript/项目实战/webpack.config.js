@@ -10,7 +10,8 @@ module.exports = {
     filename: 'bundle.js',
     // 告诉 webpack 打包后的代码不使用箭头函数
     environment: {
-      arrowFunction: false
+      arrowFunction: false,
+      const: false
     }
   },
   module: {
@@ -46,6 +47,29 @@ module.exports = {
           'ts-loader'
         ],
         exclude: /node-modules/
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'postcss-preset-env',
+                    {
+                      browsers: 'last 2 versions'
+                    }
+                  ]
+                ]
+              }
+            }
+          },
+          'less-loader'
+        ]
       }
     ]
   },
