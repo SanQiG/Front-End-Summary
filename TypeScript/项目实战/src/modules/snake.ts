@@ -28,10 +28,15 @@
       throw new Error('hit wall!!');
     }
     if (this.bodies[1] && (<HTMLElement>this.bodies[1]).offsetLeft === val) {
-
+      if (val > this.X) {
+        val = this.X - 10;
+      } else {
+        val = this.X + 10;
+      }
     }
     this.movebody();
     this.head.style.left = `${val}px`;
+    this.checkHeadBody();
   }
 
   set Y(val) {
@@ -40,10 +45,15 @@
       throw new Error('hit wall!!');
     }
     if (this.bodies[1] && (<HTMLElement>this.bodies[1]).offsetTop === val) {
-      return;
+      if (val > this.Y) {
+        val = this.Y - 10;
+      } else {
+        val = this.Y + 10;
+      }
     }
     this.movebody();
     this.head.style.top = `${val}px`;
+    this.checkHeadBody();
   }
 
   addBody() {
@@ -58,6 +68,15 @@
       const Y = ele.offsetTop;
       ele2.style.left = `${X}px`;
       ele2.style.top = `${Y}px`;
+    }
+  }
+
+  checkHeadBody() {
+    for (let i = 1; i < this.bodies.length; ++i) {
+      const bd = this.bodies[i] as HTMLElement;
+      if (this.X === bd.offsetLeft && this.Y === bd.offsetTop) {
+        throw new Error('hit itself!!');
+      }
     }
   }
 }
